@@ -30,20 +30,8 @@ TAGS = [
 ]
 
 SKIPPABLE_TAGS = ["NOTE", "HEAD", "TRLR"]
-DIRECT_SET_TAGS = {
-    "NAME": "name",
-    "SEX" : "gender",
-    "HUSB" : "husband_id",
-    "WIFE" : "wife_id",
-    "FAMC" : "child_family_id",
-    "FAMS" : "spouse_family_id"
-    }
-DATE_TAGS = {
-    "BIRT" : "birth",
-    "DEAT" : "death",
-    "MARR" : "married",
-    "DIV"  : "divorced"
-    }
+DIRECT_SET_TAGS = ["NAME", "SEX", "HUSB", "WIFE", "FAMC", "FAMS", "CHIL"]
+DATE_TAGS = ["BIRT", "DEAT", "MARR", "DIV"]
 
 def Empty_Record (tag, id):
     if tag == "INDI":
@@ -88,10 +76,12 @@ def parse_file (handle):
                 data[fields.tag][fields.args] = Empty_Record(fields.tag, fields.args)
                 stack = [fields.tag,fields.args]
             elif fields.tag in DIRECT_SET_TAGS:
-                setattr(data[stack[0]][stack[1]], DIRECT_SET_TAGS[fields.tag], fields.args) #this is dirty...
+                data[stack[0]][stack[1]].parse_value(fields.tag,  fields.args)
             elif fields.tag in DATE_TAGS:
                 stack.append(fields.tag)
             elif fields.tag == "DATE":
-                setattr(data[stack[0]][stack[1]], DATE_TAGS[stack.pop()], fields.args) #this is dirty...
-
+                data[stack[0]][stack[1]].parse_value(stack.pop(), fields.args)
+        else:
+            print("Unknown tag:" + fields.tag)
+    
     return (data['INDI'], data['FAM'])
