@@ -70,20 +70,22 @@ def parse_file (handle):
     stack = []
     
     for line in handle:
-        fields = parse_line (line)
-        if fields.valid:
-            if fields.tag in SKIPPABLE_TAGS:
-                continue
-            elif fields.level == "0":
-                data[fields.tag][fields.args] = Empty_Record(fields.tag, fields.args)
-                stack = [fields.tag,fields.args]
-            elif fields.tag in DIRECT_SET_TAGS:
-                data[stack[0]][stack[1]].parse_value(fields.tag,  fields.args)
-            elif fields.tag in DATE_TAGS:
-                stack.append(fields.tag)
-            elif fields.tag == "DATE":
-                data[stack[0]][stack[1]].parse_value(stack.pop(), fields.args)
-        else:
-            print("Unknown tag:" + fields.tag)
-    
+        try:
+            fields = parse_line (line)
+            if fields.valid:
+                if fields.tag in SKIPPABLE_TAGS:
+                    continue
+                elif fields.level == "0":
+                    data[fields.tag][fields.args] = Empty_Record(fields.tag, fields.args)
+                    stack = [fields.tag,fields.args]
+                elif fields.tag in DIRECT_SET_TAGS:
+                    data[stack[0]][stack[1]].parse_value(fields.tag,  fields.args)
+                elif fields.tag in DATE_TAGS:
+                    stack.append(fields.tag)
+                elif fields.tag == "DATE":
+                    data[stack[0]][stack[1]].parse_value(stack.pop(), fields.args)
+            else:
+                print("Line failed validation (invalid tag or bad level):" + line.strip())
+        except:
+            print("Unknown error parsing line:" + line.strip())
     return (data['INDI'], data['FAM'])
