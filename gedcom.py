@@ -1,6 +1,8 @@
+# SSW 555 Project GEDCOM Parser / Validator
+#
 # David Hubin
-# SSW 555 Project 2
-# GEDCOM Validator
+# Ayana Perry
+# Rakshith Varadaraju
 
 import sys
 
