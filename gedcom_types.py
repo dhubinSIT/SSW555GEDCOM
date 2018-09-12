@@ -17,8 +17,8 @@ class Individual:
         "SEX" : "gender",
         "BIRT" : "birth",
         "DEAT" : "death",
-        "FAMC" : "child_family_id",
-        "FAMS" : "spouse_family_id"
+        "FAMC" : "child_family_ids",
+        "FAMS" : "spouse_family_ids"
     }
     
     def __init__(self, identifier):
@@ -27,16 +27,22 @@ class Individual:
         self.gender = None
         self.birth = None
         self.death = None
-        self.child_family_id = None
-        self.spouse_family_id = None
+        self.child_family_ids = []
+        self.spouse_family_ids = []
         
     def __str__(self):
-        return self.id + " name=" + self.name + " dob=" + self.birth
+        return self.id + " name=" + self.name + " dob=" + self.birth + \
+        " child-of=" + str(self.child_family_ids) + " spouse-of=" + str(self.spouse_family_ids)
      
     # Right now, just push values as strings straight into the fields.
     # Parsing into dates/etc can come later.
     def parse_value(self, gedcomTag,  gedcomValue):
-        setattr(self, Individual.TAG_MAP[gedcomTag], gedcomValue)
+        if gedcomTag == "FAMC":
+            self.child_family_ids.append(gedcomValue)
+        elif gedcomTag == "FAMS":
+            self.spouse_family_ids.append(gedcomValue)
+        else:
+            setattr(self, Individual.TAG_MAP[gedcomTag], gedcomValue)
 
 class Family:
     
