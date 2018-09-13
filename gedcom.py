@@ -15,10 +15,10 @@ def directfilecheck(directory):
     pt_indi = PrettyTable(field_names=['ID','Name','Gender','Birthday','Age','Alive','Death','Child','Spouse'])
     pt_fam = PrettyTable(field_names=['ID','Married','Divorced','Husband ID','Husband Name','Wife ID','Wife Name','Children'])
                
-    for filename in os.listdir(directory):   #Python program that given a directory name, searches that directory for GEDCOM files"): 
+    for filename in os.listdir(directory):   #Python program that given a directory name, searches that directory for GEDCOM files"):
+        if filename.endswith(".ged"):
             num_of_id, num_of_name, num_of_gender, num_of_birthday,num_of_age, num_of_alive,num_of_death,num_of_child,num_of_spouse = filecheck(directory,filename)
-            pt_indi.add_row([filename,num_of_id, num_of_name, num_of_gender, num_of_birthday,num_of_age, num_of_alive,num_of_death,num_of_child,num_of_spouse])
-            
+            pt_indi.add_row([filename,num_of_id, num_of_name, num_of_gender, num_of_birthday,num_of_age, num_of_alive,num_of_death,num_of_child,num_of_spouse])    
             num_of_famid, num_of_married, num_of_divorced, num_of_husbandid, num_of_husbandname, num_of_wifeid, num_of_wifename, num_of_children = filecheck(directory,filename)
             pt_indi.add_row([filename,num_of_famid, num_of_married, num_of_divorced, num_of_husbandid, num_of_husbandname, num_of_wifeid, num_of_wifename, num_of_children])
     print(pt_indi)
