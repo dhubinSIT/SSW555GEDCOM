@@ -31,7 +31,7 @@ class Individual:
         self.spouse_family_ids = []
         
     def __str__(self):
-        return self.id + " name=" + self.name + " dob=" + self.birth + \
+        return self.id + " name=" + self.name + " dob=" + str(self.birth) + \
         " child-of=" + str(self.child_family_ids) + " spouse-of=" + str(self.spouse_family_ids)
      
     # Right now, just push values as strings straight into the fields.
@@ -63,7 +63,7 @@ class Family:
         self.children_id_list = []
         
     def __str__(self):
-        return self.id + " husb=" + self.husband_id + " wife=" + self.wife_id + " children=" + str(self.children_id_list)
+        return self.id + " husb=" + str(self.husband_id) + " wife=" + str(self.wife_id) + " children=" + str(self.children_id_list)
     
     # Right now, just push values as strings straight into the fields.
     # Parsing into dates/etc can come later.
