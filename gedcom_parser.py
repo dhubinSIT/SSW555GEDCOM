@@ -31,6 +31,7 @@ TAGS = [
     "(?P<level>2)\s+(?P<tag>DATE)\s+(?P<args>.*)"
 ]
 
+"""Helper constants for the parser, allowing some dispatching based on function read."""
 SKIPPABLE_TAGS = ["NOTE", "HEAD", "TRLR"]
 DIRECT_SET_TAGS = ["NAME", "SEX", "HUSB", "WIFE", "FAMC", "FAMS", "CHIL"]
 DATE_TAGS = ["BIRT", "DEAT", "MARR", "DIV"]
