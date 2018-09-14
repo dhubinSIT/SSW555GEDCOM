@@ -5,7 +5,7 @@
 # Rakshith Varadaraju
 
 import re
-from gedcom_types import *
+import gedcom_types
 
 # All of the valid tags in this subset of GEDCOM
 # Use named part of the regexp to make extraction easy.
@@ -36,20 +36,21 @@ DIRECT_SET_TAGS = ["NAME", "SEX", "HUSB", "WIFE", "FAMC", "FAMS", "CHIL"]
 DATE_TAGS = ["BIRT", "DEAT", "MARR", "DIV"]
 
 def Empty_Record (tag, id):
+    """Helper function for making an empty record based on GEDCOM tag."""
     if tag == "INDI":
-        return Individual(identifier = id)
+        return gedcom_types.Individual(identifier = id)
     else:
-        return Family (identifier = id)
+        return gedcom_types.Family (identifier = id)
     
-# Take a single string and figure out whether it is valid.
 def parse_line (line):
+    """Take a single string and figure out whether it is valid."""
     for tag in TAGS:
         m = re.match(tag, line)
         if m != None:
-            return Validation_Results(valid = True,
-                                      level = m.group('level'),
-                                      tag = m.group('tag'),
-                                      args = m.group('args'))
+            return gedcom_types.Validation_Results(valid = True,
+                                                   level = m.group('level'),
+                                                   tag = m.group('tag'),
+                                                   args = m.group('args'))
         
     # Didn't match anything... try badly leveled FAM or INDI
     m = re.match("(?P<level>\d)\s+(?P<args>.*)\s+(?P<tag>INDI|FAM)$",line)
@@ -58,17 +59,24 @@ def parse_line (line):
     if m == None:
         m = re.match("(?P<level>\d)\s+(?P<tag>\S+)\s+(?P<args>.*)", line)
     if m != None:
-        return Validation_Results(valid = False,
-                                  level = m.group('level'),
-                                  tag = m.group('tag'),
-                                  args = m.group('args'))
+        return gedcom_types.Validation_Results(valid = False,
+                                              level = m.group('level'),
+                                              tag = m.group('tag'),
+                                              args = m.group('args'))
 
 
 def parse_file (handle):
+    """Parse lines from the file handle, and return a tuple of two dictionaries.
+    Each dictionary (one for individuals, one for family) is keyed based on unique identifiers."""
     data = {'INDI' : {},
             'FAM' : {}}
     stack = []
     
+    # Parsing the GEDCOM format is done as a stack.
+    # First element => Individual or Family dictionary.
+    # Second element => Unique identifier in that dictionary
+    # Third element (if needed) => Which date field was just read (birth/death/etc)
+    #       This element will be popped once the date is processed.
     for line in handle:
         try:
             fields = parse_line (line)
