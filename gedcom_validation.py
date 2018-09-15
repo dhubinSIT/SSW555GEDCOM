@@ -5,7 +5,7 @@
 # Rakshith Varadaraju
 
 def collect_validation_warnings(individuals,  families):
-    """This procedure will run through every validation route
+    """This procedure will run through every validation routine
     returning the accumulated warnings.  This is separate in case
     we want to add validation routines that sit outside the classes."""
     warnings = []
