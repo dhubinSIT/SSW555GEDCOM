@@ -5,6 +5,7 @@
 # Rakshith Varadaraju
 
 from collections import namedtuple
+from datetime import datetime
 
 # Pass around named fields for ease of use (probably overkill)
 Parser_Results = namedtuple("Parser_Results", ['valid', 'level', 'tag', 'args'])
@@ -51,12 +52,24 @@ class Individual:
         else:
             setattr(self, Individual.TAG_MAP[gedcomTag], value)
 
-    def validate_individual(self):
+    def validate(self):
         '''This function checks for the following errors
+        US01 : Dates before current date.
         US03 : Birth should occur before death of an individual'''
         if (self.birth != None) and (self.death != None):
             if self.death < self.birth:
                 print('Error US03: Birth date of ' + self.name + ' (' + self.id + ') occurs after death date.')
+        
+        return self.__Check_Dates_Before_Today() # + self.__Next_Validation_Routine()...
+
+    def __Check_Dates_Before_Today(self):
+        """Validation routine for US01 : Dates before current date."""
+        warnings = []
+        if self.birth != None and self.birth > datetime.today():
+            warnings.append(Validation_Results("US01", 'Individual %s has a birth date in the future.' % self.id))
+        if self.death != None and self.death > datetime.today():
+            warnings.append(Validation_Results("US01", 'Individual %s has a death date in the future.' % self.id))
+        return warnings
 
 class Family:
     '''This is a datastructure to store information about a family.
@@ -90,3 +103,16 @@ class Family:
         else:
             setattr(self, Family.TAG_MAP[gedcomTag], value)
 
+    def validate(self):
+        '''This function checks for the following errors
+        US01 : Dates before current date.'''        
+        return self.__Check_Dates_Before_Today() # + self.__Next_Validation_Routine()...
+        
+    def __Check_Dates_Before_Today(self):
+        """Validation routine for US01 : Dates before current date."""
+        warnings = []
+        if self.married != None and self.married > datetime.today():
+            warnings.append(Validation_Results("US01", 'Family %s has a marriage date in the future.' % self.id))
+        if self.divorced != None and self.divorced > datetime.today():
+            warnings.append(Validation_Results("US01", 'Family %s has a divorce date in the future.' % self.id))
+        return warnings

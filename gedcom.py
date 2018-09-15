@@ -10,6 +10,7 @@ import datetime
 
 from prettytable import PrettyTable
 from gedcom_parser import parse_file
+import gedcom_validation
 
 def datestring(d):
     """Pretty-print a date for output."""
@@ -22,6 +23,8 @@ if __name__ == "__main__":
     '''Begin by opening the file '''
     with open (sys.argv[1], 'r') as f:
         (indi, fam) = parse_file(f)
+        warnings = gedcom_validation.collect_validation_warnings(indi,  fam)
+        
         '''Begin code for arranging the Individual PrettyTable '''
         print('Individuals')
         pt = PrettyTable(field_names=['ID','Name','Gender','Birthday','Death','Child','Spouse'])
@@ -36,6 +39,12 @@ if __name__ == "__main__":
             pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,indi[fam[x].husband_id].name,fam[x].wife_id,indi[fam[x].wife_id].name,fam[x].children_id_list])
         print(pt)
         
-         # Check for errors and anomalies
-        for x in sorted(indi):
-            indi[x].validate_individual()
+        if len(warnings) > 0:
+            print('Warnings')
+            pt = PrettyTable(field_names=['Code', 'Message'])
+            for warn in warnings:
+                pt.add_row([warn.story,  warn.message])
+            print(pt)
+        else:
+            print()
+            print("GEDCOM database is sane.")
