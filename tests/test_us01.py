@@ -4,8 +4,9 @@
 # Ayana Perry
 # Rakshith Varadaraju
 
+from io import StringIO
 import unittest
-from gedcom_parser import parse_date
+from gedcom_parser import parse_file,  parse_date
 from gedcom_validation import US01_DatesBeforeCurrentDate
 from gedcom_types import Family,  Individual
 
@@ -71,3 +72,28 @@ class US01TestCase(unittest.TestCase):
     def test_multiple_failures(self):
         warnings = US01_DatesBeforeCurrentDate(individuals = {'@doubleIndi@' : self.DoubleBadIndi}, families = {'@doubleFam@' : self.DoubleBadFam})
         self.assertEqual(len(warnings),  4)
+        
+    def test_full_path(self):
+        buff = StringIO("""0 @I1@ INDI
+1 NAME CrankyFrank /Coffin/
+1 SEX M
+1 BIRT
+2 DATE 2 JAN 2940
+1 FAMS @F1@
+0 @I2@ INDI
+1 NAME MarvelousMay /Coffin/
+1 SEX F
+1 BIRT
+2 DATE 15 MAY 2941
+1 FAMS @F1@
+0 @F1@ FAM
+1 HUSB @I1@
+1 WIFE @I2@
+1 MARR
+2 DATE 15 JUL 2972
+1 DIV
+2 DATE 15 JUL 2973""")
+        (ind,  fam) = parse_file(buff)
+        warnings = US01_DatesBeforeCurrentDate(ind,  fam)
+        self.assertEqual(len(warnings),  4)
+        
