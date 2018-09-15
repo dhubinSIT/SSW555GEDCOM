@@ -4,6 +4,7 @@
 # Ayana Perry
 # Rakshith Varadaraju
 
+import datetime
 import re
 import gedcom_types
 
@@ -48,10 +49,10 @@ def parse_line (line):
     for tag in TAGS:
         m = re.match(tag, line)
         if m != None:
-            return gedcom_types.Validation_Results(valid = True,
-                                                   level = m.group('level'),
-                                                   tag = m.group('tag'),
-                                                   args = m.group('args'))
+            return gedcom_types.Parser_Results(valid = True,
+                                               level = m.group('level'),
+                                               tag = m.group('tag'),
+                                               args = m.group('args'))
         
     # Didn't match anything... try badly leveled FAM or INDI
     m = re.match("(?P<level>\d)\s+(?P<args>.*)\s+(?P<tag>INDI|FAM)$",line)
@@ -60,11 +61,17 @@ def parse_line (line):
     if m == None:
         m = re.match("(?P<level>\d)\s+(?P<tag>\S+)\s+(?P<args>.*)", line)
     if m != None:
-        return gedcom_types.Validation_Results(valid = False,
-                                              level = m.group('level'),
-                                              tag = m.group('tag'),
+        return gedcom_types.Parser_Results(valid = False,
+                                           level = m.group('level'),
+                                           tag = m.group('tag'),
                                               args = m.group('args'))
 
+def parse_date(str):
+    """Attempt to parse a date string.  If not parse-able, return None."""
+    try:
+        return datetime.datetime.strptime(str, "%d %b %Y")
+    except:
+        return None
 
 def parse_file (handle):
     """Parse lines from the file handle, and return a tuple of two dictionaries.
@@ -88,11 +95,15 @@ def parse_file (handle):
                     data[fields.tag][fields.args] = Empty_Record(fields.tag, fields.args)
                     stack = [fields.tag,fields.args]
                 elif fields.tag in DIRECT_SET_TAGS:
-                    data[stack[0]][stack[1]].parse_value(fields.tag,  fields.args)
+                    data[stack[0]][stack[1]].apply_value(fields.tag,  fields.args)
                 elif fields.tag in DATE_TAGS:
                     stack.append(fields.tag)
                 elif fields.tag == "DATE":
-                    data[stack[0]][stack[1]].parse_value(stack.pop(), fields.args)
+                    parsed_date = parse_date(fields.args)
+                    if parsed_date != None:
+                        data[stack[0]][stack[1]].apply_value(stack.pop(), parsed_date)
+                    else:
+                        print("Date failed validation (will skip setting date):" + line.strip())
             else:
                 print("Line failed validation (invalid tag or bad level):" + line.strip())
         except:

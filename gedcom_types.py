@@ -7,7 +7,10 @@
 from collections import namedtuple
 
 # Pass around named fields for ease of use (probably overkill)
-Validation_Results = namedtuple("Validation_Results", ['valid', 'level', 'tag', 'args'])
+Parser_Results = namedtuple("Parser_Results", ['valid', 'level', 'tag', 'args'])
+
+Validation_Results = namedtuple("Validation_Results", ['story',  'message'])
+"""Holder for validation issues."""
 
 class Individual:
     '''This is a datastructure that holds information about an individual.
@@ -34,19 +37,19 @@ class Individual:
         self.child_family_ids = []
         self.spouse_family_ids = []
         
-    # Right now, just push values as strings straight into the fields.
-    # Parsing into dates/etc can come later.
-    def parse_value(self, gedcomTag,  gedcomValue):
+    def apply_value(self, gedcomTag,  value):
         '''This function determines which fields to add into the individual
         record. If it is a child or spouse record, it will be added to the 
         ids list. Otherwise the remaining tags will be added as the 
-        individual record attributes'''
+        individual record attributes.
+        
+        Values are expected to be strings, except for dates, which should be datetime objects.'''
         if gedcomTag == "FAMC":
-            self.child_family_ids.append(gedcomValue)
+            self.child_family_ids.append(value)
         elif gedcomTag == "FAMS":
-            self.spouse_family_ids.append(gedcomValue)
+            self.spouse_family_ids.append(value)
         else:
-            setattr(self, Individual.TAG_MAP[gedcomTag], gedcomValue)
+            setattr(self, Individual.TAG_MAP[gedcomTag], value)
 
 class Family:
     '''This is a datastructure to store information about a family.
@@ -69,14 +72,14 @@ class Family:
         self.wife_id = None
         self.children_id_list = []
         
-    # Right now, just push values as strings straight into the fields.
-    # Parsing into dates/etc can come later.
-    def parse_value(self, gedcomTag,  gedcomValue):
+    def apply_value(self, gedcomTag,  value):
         '''This function determines which fields to add to the family
         record. If it encounters children ids, it adds it to the children
-        list. Otherwise, if adds it as new data to the family record'''
+        list. Otherwise, if adds it as new data to the family record.
+        
+        Values are expected to be strings, except for dates, which should be datetime objects.'''
         if gedcomTag == "CHIL":
-            self.children_id_list.append(gedcomValue)
+            self.children_id_list.append(value)
         else:
-            setattr(self, Family.TAG_MAP[gedcomTag], gedcomValue)
+            setattr(self, Family.TAG_MAP[gedcomTag], value)
 
