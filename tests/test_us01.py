@@ -42,12 +42,12 @@ class US01TestCase(unittest.TestCase):
         self.DoubleBadFam.apply_value("DIV", parse_date("15 SEP 2970"))
     
     def test_birth(self):
-        warnings = DatesBeforeCurrentDate(individuals = {'@birth@' : self.BadBirth}, families = {})
+        warnings = DatesBeforeCurrentDate(individuals = {'@birth@' : self.BadBirth, '@okay@' : self.OkayIndi}, families = {})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@birth@' in warnings[0].message)
 
     def test_death(self):
-        warnings = DatesBeforeCurrentDate(individuals = {'@death@' : self.BadDeath}, families = {})
+        warnings = DatesBeforeCurrentDate(individuals = {'@death@' : self.BadDeath, '@okay@' : self.OkayIndi}, families = {})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@death@' in warnings[0].message)
         
@@ -56,12 +56,12 @@ class US01TestCase(unittest.TestCase):
         self.assertEqual(len(warnings),  0)
     
     def test_marriage(self):
-        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@badmarr@' : self.BadMarr})
+        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@badmarr@' : self.BadMarr, '@okayf@' : self.OkayFam})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@badmarr@' in warnings[0].message)
 
     def test_divorce(self):
-        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@baddiv@' : self.BadDiv})
+        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@baddiv@' : self.BadDiv, '@okayf@' : self.OkayFam})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@baddiv@' in warnings[0].message)
         
@@ -70,7 +70,8 @@ class US01TestCase(unittest.TestCase):
         self.assertEqual(len(warnings),  0)
         
     def test_multiple_failures(self):
-        warnings = DatesBeforeCurrentDate(individuals = {'@doubleIndi@' : self.DoubleBadIndi}, families = {'@doubleFam@' : self.DoubleBadFam})
+        warnings = DatesBeforeCurrentDate(individuals = {'@doubleIndi@' : self.DoubleBadIndi, '@okay@' : self.OkayIndi},
+                                          families = {'@doubleFam@' : self.DoubleBadFam, '@okayf@' : self.OkayFam})
         self.assertEqual(len(warnings),  4)
         
     def test_full_path(self):
