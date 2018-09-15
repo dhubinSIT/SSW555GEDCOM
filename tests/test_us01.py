@@ -42,31 +42,31 @@ class US01TestCase(unittest.TestCase):
         self.DoubleBadFam.apply_value("DIV", parse_date("15 SEP 2970"))
     
     def test_birth(self):
-        warnings = self.BadBirth.validate()
+        warnings = self.BadBirth._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@birth@' in warnings[0].message)
 
     def test_death(self):
-        warnings = self.BadDeath.validate()
+        warnings = self.BadDeath._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@death@' in warnings[0].message)
         
     def test_okay_individual(self):
-        warnings = self.OkayIndi.validate()
+        warnings = self.OkayIndi._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  0)
     
     def test_marriage(self):
-        warnings = self.BadMarr.validate()
+        warnings = self.BadMarr._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@badmarr@' in warnings[0].message)
 
     def test_divorce(self):
-        warnings = self.BadDiv.validate()
+        warnings = self.BadDiv._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@baddiv@' in warnings[0].message)
         
     def test_okay_family(self):
-        warnings = self.OkayFam.validate()
+        warnings = self.OkayFam._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  0)
         
     def test_full_path(self):
