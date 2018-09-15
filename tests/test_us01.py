@@ -12,6 +12,8 @@ from gedcom_types import Family,  Individual
 
 class US01TestCase(unittest.TestCase):
     def setUp(self):
+        """Set up a bunch of Individuals and Families with various future date issues
+        (and some that are Okay)."""
         self.OkayIndi = Individual("@okay@")
         self.OkayIndi.apply_value("BIRT", parse_date("1 JUN 1945"))
         self.OkayIndi.apply_value("DEAT", parse_date("6 JAN 1995"))
@@ -42,30 +44,36 @@ class US01TestCase(unittest.TestCase):
         self.DoubleBadFam.apply_value("DIV", parse_date("15 SEP 2970"))
     
     def test_birth(self):
+        """Test warnings for future births."""
         warnings = self.BadBirth._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@birth@' in warnings[0].message and "birth date" in warnings[0].message)
 
     def test_death(self):
+        """Test warnings for future deaths."""
         warnings = self.BadDeath._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@death@' in warnings[0].message and "death date" in warnings[0].message)
         
     def test_okay_individual(self):
+        """Test no warning case."""
         warnings = self.OkayIndi._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  0)
     
     def test_marriage(self):
+        """Test warnings for future marriages."""
         warnings = self.BadMarr._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@badmarr@' in warnings[0].message and "marriage date" in warnings[0].message)
 
     def test_divorce(self):
+        """Test warnings for future divorces."""
         warnings = self.BadDiv._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@baddiv@' in warnings[0].message and "divorce date" in warnings[0].message)
 
     def test_double_warnings(self):
+        """Test warnings for multiple issues."""
         warnings = self.DoubleBadFam._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  2)
         
@@ -73,10 +81,12 @@ class US01TestCase(unittest.TestCase):
         self.assertEqual(len(warnings),  2)   
         
     def test_okay_family(self):
+        """Test no warning case."""
         warnings = self.OkayFam._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  0)
         
     def test_full_path(self):
+        """Integration test for full parser->objects->validation data path."""
         buff = StringIO("""0 @I1@ INDI
 1 NAME CrankyFrank /Coffin/
 1 SEX M
