@@ -5,6 +5,7 @@
 # Rakshith Varadaraju
 
 from collections import namedtuple
+from datetime import datetime
 
 # Pass around named fields for ease of use (probably overkill)
 Validation_Results = namedtuple("Validation_Results", ['valid', 'level', 'tag', 'args'])
@@ -47,6 +48,13 @@ class Individual:
             self.spouse_family_ids.append(gedcomValue)
         else:
             setattr(self, Individual.TAG_MAP[gedcomTag], gedcomValue)
+
+    def validate_individual(self):
+        '''This function checks for the following errors
+        US03 : Birth should occur before death of an individual'''
+        if (self.birth != None) and (self.death != None):
+            if (datetime.strptime(self.death, '%d %b %Y') < datetime.strptime(self.birth, '%d %b %Y')):
+                print('Error US03: Birth date of ' + self.name + ' (' + self.id + ') occurs after death date.')
 
 class Family:
     '''This is a datastructure to store information about a family.
