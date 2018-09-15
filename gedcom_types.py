@@ -5,7 +5,6 @@
 # Rakshith Varadaraju
 
 from collections import namedtuple
-from datetime import datetime
 
 # Pass around named fields for ease of use (probably overkill)
 Parser_Results = namedtuple("Parser_Results", ['valid', 'level', 'tag', 'args'])
@@ -56,7 +55,7 @@ class Individual:
         '''This function checks for the following errors
         US03 : Birth should occur before death of an individual'''
         if (self.birth != None) and (self.death != None):
-            if (datetime.strptime(self.death, '%d %b %Y') < datetime.strptime(self.birth, '%d %b %Y')):
+            if self.death < self.birth:
                 print('Error US03: Birth date of ' + self.name + ' (' + self.id + ') occurs after death date.')
 
 class Family:
