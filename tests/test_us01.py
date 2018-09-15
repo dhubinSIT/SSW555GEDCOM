@@ -7,7 +7,7 @@
 from io import StringIO
 import unittest
 from gedcom_parser import parse_file,  parse_date
-from gedcom_validation import US01_DatesBeforeCurrentDate
+from gedcom_validation import DatesBeforeCurrentDate
 from gedcom_types import Family,  Individual
 
 class US01TestCase(unittest.TestCase):
@@ -42,35 +42,35 @@ class US01TestCase(unittest.TestCase):
         self.DoubleBadFam.apply_value("DIV", parse_date("15 SEP 2970"))
     
     def test_birth(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {'@birth@' : self.BadBirth}, families = {})
+        warnings = DatesBeforeCurrentDate(individuals = {'@birth@' : self.BadBirth}, families = {})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@birth@' in warnings[0].message)
 
     def test_death(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {'@death@' : self.BadDeath}, families = {})
+        warnings = DatesBeforeCurrentDate(individuals = {'@death@' : self.BadDeath}, families = {})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@death@' in warnings[0].message)
         
     def test_okay_individual(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {'@okay@' : self.OkayIndi}, families = {})
+        warnings = DatesBeforeCurrentDate(individuals = {'@okay@' : self.OkayIndi}, families = {})
         self.assertEqual(len(warnings),  0)
     
     def test_marriage(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {}, families = {'@badmarr@' : self.BadMarr})
+        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@badmarr@' : self.BadMarr})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@badmarr@' in warnings[0].message)
 
     def test_divorce(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {}, families = {'@baddiv@' : self.BadDiv})
+        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@baddiv@' : self.BadDiv})
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@baddiv@' in warnings[0].message)
         
     def test_okay_family(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {}, families = {'@okayf@' : self.OkayFam})
+        warnings = DatesBeforeCurrentDate(individuals = {}, families = {'@okayf@' : self.OkayFam})
         self.assertEqual(len(warnings),  0)
         
     def test_multiple_failures(self):
-        warnings = US01_DatesBeforeCurrentDate(individuals = {'@doubleIndi@' : self.DoubleBadIndi}, families = {'@doubleFam@' : self.DoubleBadFam})
+        warnings = DatesBeforeCurrentDate(individuals = {'@doubleIndi@' : self.DoubleBadIndi}, families = {'@doubleFam@' : self.DoubleBadFam})
         self.assertEqual(len(warnings),  4)
         
     def test_full_path(self):
@@ -94,6 +94,6 @@ class US01TestCase(unittest.TestCase):
 1 DIV
 2 DATE 15 JUL 2973""")
         (ind,  fam) = parse_file(buff)
-        warnings = US01_DatesBeforeCurrentDate(ind,  fam)
+        warnings = DatesBeforeCurrentDate(ind,  fam)
         self.assertEqual(len(warnings),  4)
         

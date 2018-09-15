@@ -7,7 +7,18 @@
 import datetime
 import gedcom_types
 
-def US01_DatesBeforeCurrentDate(individuals,  families):
+def collect_validation_warnings(individuals,  families):
+    """This procedure will run through every validation route
+    (that isn't embedded into the Individual/Family classes),
+    returning the accumulated warnings."""
+    warnings = []
+    warnings = warnings + DatesBeforeCurrentDate(individuals, families)
+    return warnings
+
+def DatesBeforeCurrentDate(individuals,  families):
+    """US01: Dates (birth, marriage, divorce, death) should not be after the current date.
+    
+    Return a collection of warnings on the supplied individuals and families for future dates."""
     today = datetime.datetime.today()
     bad_birthdays = [gedcom_types.Validation_Results('US01','Individual %s has a birthday in the future.' % x.id)
                      for x in individuals.values()
@@ -22,10 +33,3 @@ def US01_DatesBeforeCurrentDate(individuals,  families):
                      for x in families.values()
                      if x.divorced != None and x.divorced > today]
     return bad_birthdays + bad_deaths + bad_marriages + bad_divorce
-
-def collect_validation_warnings(individuals,  families):
-    warnings = []
-    
-    warnings = warnings + US01_DatesBeforeCurrentDate(individuals, families)
-    
-    return warnings
