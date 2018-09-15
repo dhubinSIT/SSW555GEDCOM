@@ -64,6 +64,13 @@ class US01TestCase(unittest.TestCase):
         warnings = self.BadDiv._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
         self.assertTrue('@baddiv@' in warnings[0].message and "divorce date" in warnings[0].message)
+
+    def test_double_warnings(self):
+        warnings = self.DoubleBadFam._Check_Dates_Before_Today()
+        self.assertEqual(len(warnings),  2)
+        
+        warnings = self.DoubleBadIndi._Check_Dates_Before_Today()
+        self.assertEqual(len(warnings),  2)   
         
     def test_okay_family(self):
         warnings = self.OkayFam._Check_Dates_Before_Today()
