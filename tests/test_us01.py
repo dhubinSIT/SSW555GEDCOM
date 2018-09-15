@@ -44,12 +44,12 @@ class US01TestCase(unittest.TestCase):
     def test_birth(self):
         warnings = self.BadBirth._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
-        self.assertTrue('@birth@' in warnings[0].message)
+        self.assertTrue('@birth@' in warnings[0].message and "birth date" in warnings[0].message)
 
     def test_death(self):
         warnings = self.BadDeath._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
-        self.assertTrue('@death@' in warnings[0].message)
+        self.assertTrue('@death@' in warnings[0].message and "death date" in warnings[0].message)
         
     def test_okay_individual(self):
         warnings = self.OkayIndi._Check_Dates_Before_Today()
@@ -58,12 +58,12 @@ class US01TestCase(unittest.TestCase):
     def test_marriage(self):
         warnings = self.BadMarr._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
-        self.assertTrue('@badmarr@' in warnings[0].message)
+        self.assertTrue('@badmarr@' in warnings[0].message and "marriage date" in warnings[0].message)
 
     def test_divorce(self):
         warnings = self.BadDiv._Check_Dates_Before_Today()
         self.assertEqual(len(warnings),  1)
-        self.assertTrue('@baddiv@' in warnings[0].message)
+        self.assertTrue('@baddiv@' in warnings[0].message and "divorce date" in warnings[0].message)
         
     def test_okay_family(self):
         warnings = self.OkayFam._Check_Dates_Before_Today()
@@ -91,5 +91,8 @@ class US01TestCase(unittest.TestCase):
 2 DATE 15 JUL 2973""")
         (ind,  fam) = parse_file(buff)
         warnings = collect_validation_warnings(ind,  fam)
-        self.assertEqual(len(warnings),  4)
+        count_of_us01_errors = 0
+        for warn in warnings:
+            if warn.story == "US01": count_of_us01_errors += 1
+        self.assertEqual(count_of_us01_errors,  4)
         
