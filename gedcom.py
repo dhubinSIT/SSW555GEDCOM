@@ -9,9 +9,7 @@ import sys
 import datetime
 
 from prettytable import PrettyTable
-from gedcom_types import *
 from gedcom_parser import parse_file
-import gedcom_validation
 
 def datestring(d):
     """Pretty-print a date for output."""
@@ -37,3 +35,7 @@ if __name__ == "__main__":
         for x in sorted(fam):
             pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,indi[fam[x].husband_id].name,fam[x].wife_id,indi[fam[x].wife_id].name,fam[x].children_id_list])
         print(pt)
+        
+         # Check for errors and anomalies
+        for x in sorted(indi):
+            indi[x].validate_individual()
