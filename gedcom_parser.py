@@ -74,8 +74,10 @@ def parse_date(str):
         return None
 
 def parse_file (handle):
-    """Parse lines from the file handle, and return a tuple of two dictionaries.
-    Each dictionary (one for individuals, one for family) is keyed based on unique identifiers."""
+    """Parse lines from the file handle, and return a tuple of two dictionaries and a list.
+    Each dictionary (one for individuals, one for family) is keyed based on unique identifiers.
+    The list is a list of warnings for tag arguments (such as dates) which could not successfully be parsed."""
+    warnings = []
     data = {'INDI' : {},
             'FAM' : {}}
     stack = []
@@ -100,12 +102,15 @@ def parse_file (handle):
                     stack.append(fields.tag)
                 elif fields.tag == "DATE":
                     parsed_date = parse_date(fields.args)
+                    field_to_set = stack.pop()
                     if parsed_date != None:
-                        data[stack[0]][stack[1]].apply_value(stack.pop(), parsed_date)
+                        data[stack[0]][stack[1]].apply_value(field_to_set, parsed_date)
                     else:
-                        print("Date failed validation (will skip setting date):" + line.strip())
+                        warnings.append(gedcom_types.
+                            Validation_Results("US42", "Date failed validation (%s) for %s (will skip setting date field %s):" %
+                                                       (stack[1], fields.args,  field_to_set)))
             else:
-                print("Line failed validation (invalid tag or bad level):" + line.strip())
+                print("Line failed parsing (invalid tag or bad level):" + line.strip())
         except:
             print("Unknown error parsing line:" + line.strip())
-    return (data['INDI'], data['FAM'])
+    return (data['INDI'], data['FAM'],  warnings)

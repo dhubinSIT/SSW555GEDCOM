@@ -11,6 +11,10 @@ from gedcom_validation import collect_validation_warnings
 from gedcom_types import Family,  Individual
 
 class US01TestCase(unittest.TestCase):
+    def shortDescription(self):
+        """Disable printing docstring on verbose."""
+        return None
+        
     def setUp(self):
         """Set up a bunch of Individuals and Families with various future date issues
         (and some that are Okay)."""
@@ -106,7 +110,7 @@ class US01TestCase(unittest.TestCase):
 2 DATE 15 JUL 2972
 1 DIV
 2 DATE 15 JUL 2973""")
-        (ind,  fam) = parse_file(buff)
+        (ind,  fam,  unused_warns) = parse_file(buff)
         warnings = collect_validation_warnings(ind,  fam)
         count_of_us01_errors = 0
         for warn in warnings:

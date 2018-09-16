@@ -22,8 +22,8 @@ def datestring(d):
 if __name__ == "__main__":
     '''Begin by opening the file '''
     with open (sys.argv[1], 'r') as f:
-        (indi, fam) = parse_file(f)
-        warnings = gedcom_validation.collect_validation_warnings(indi,  fam)
+        (indi, fam,  parse_warns) = parse_file(f)
+        warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi,  fam)
         
         '''Begin code for arranging the Individual PrettyTable '''
         print('Individuals')
