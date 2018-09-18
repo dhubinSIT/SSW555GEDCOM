@@ -8,7 +8,7 @@ from io import StringIO
 import unittest
 from gedcom_parser import parse_file
 
-class US01TestCase(unittest.TestCase):
+class US42TestCase(unittest.TestCase):
     def shortDescription(self):
         """Disable printing docstring on verbose."""
         return None
