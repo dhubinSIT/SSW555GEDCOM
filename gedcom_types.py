@@ -56,11 +56,7 @@ class Individual:
         '''This function checks for the following errors
         US01 : Dates before current date.
         US03 : Birth should occur before death of an individual'''
-        if (self.birth != None) and (self.death != None):
-            if self.death < self.birth:
-                print('Error US03: Birth date of ' + self.name + ' (' + self.id + ') occurs after death date.')
-        
-        return self._Check_Dates_Before_Today() # + self._Next_Validation_Routine()...
+        return self._Check_Dates_Before_Today() + self._Check_Birth_Before_Death() # + self._Next_Validation_Routine()...
 
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
@@ -69,6 +65,13 @@ class Individual:
             warnings.append(Validation_Results("US01", 'Individual %s has a birth date in the future.' % self.id))
         if self.death != None and self.death > datetime.today():
             warnings.append(Validation_Results("US01", 'Individual %s has a death date in the future.' % self.id))
+        return warnings
+
+    def _Check_Birth_Before_Death(self):
+        '''Validation routine for US03 : Birth date before Death date'''
+        warnings = []
+        if self.birth != None and self.death != None and self.birth > self.death:
+            warnings.append(Validation_Results("US03", 'Individual %s has a birth date after death date.' % self.id))
         return warnings
 
 class Family:
