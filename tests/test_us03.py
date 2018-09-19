@@ -28,7 +28,7 @@ class US03TestCase(unittest.TestCase):
         '''Test warnings if date of birth is after date of death'''
         warnings = self.BadBirth._Check_Birth_Before_Death()
         self.assertEqual(len(warnings), 1)
-        self.assertTrue('@birth' in warnings[0].message and 'birth date after death date' in warnings[0].message)
+        self.assertTrue('@birth@' in warnings[0].message and 'birth date after death date' in warnings[0].message)
 
     def test_okay_individual(self):
         '''Test warnings if date of birth is after date of death'''
