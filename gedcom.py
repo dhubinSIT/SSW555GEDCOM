@@ -19,6 +19,12 @@ def datestring(d):
     else:
         return ""
 
+def lookupname(individuals, key):
+    if key == None:
+        return ""
+    else:
+        return individuals[key].name
+
 if __name__ == "__main__":
     '''Begin by opening the file '''
     with open (sys.argv[1], 'r') as f:
@@ -36,7 +42,9 @@ if __name__ == "__main__":
         print('Families')
         pt = PrettyTable(field_names=['ID','Married','Divorced','Husband ID','Husband Name','Wife ID','Wife Name','Children'])
         for x in sorted(fam):
-            pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,indi[fam[x].husband_id].name,fam[x].wife_id,indi[fam[x].wife_id].name,fam[x].children_id_list])
+            husband_name = lookupname(indi, fam[x].husband_id)
+            wife_name = lookupname(indi,  fam[x].wife_id)
+            pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,husband_name,fam[x].wife_id,wife_name,fam[x].children_id_list])
         print(pt)
         
         if len(warnings) > 0:
