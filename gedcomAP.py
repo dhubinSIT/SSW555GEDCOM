@@ -27,7 +27,7 @@ def lookupname(individuals, key):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open ('C:/Users/Ayana Perry/Documents/StevensInstituteofTechnology/Project01_Varadaraju.ged', 'r') as f:
+    with open ('C:/Users/<username>/Documents/StevensInstituteofTechnology/Project01_Varadaraju.ged', 'r') as f:
         (indi, fam,  parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi,  fam)    
         '''Begin code for arranging the Siblings Ages in order for the PrettyTable '''
