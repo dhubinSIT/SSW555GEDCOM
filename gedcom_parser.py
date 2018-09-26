@@ -94,6 +94,10 @@ def parse_file (handle):
                 if fields.tag in SKIPPABLE_TAGS:
                     continue
                 elif fields.level == "0":
+                    if fields.args in data[fields.tag]:
+                        warnings.append(gedcom_types.
+                            Validation_Results("US22", "Duplicate identifier %s found for %s.  First entry will be overwritten."
+                                               % (fields.args, "individuals" if (fields.tag == "INDI") else "families")))
                     data[fields.tag][fields.args] = Empty_Record(fields.tag, fields.args)
                     stack = [fields.tag,fields.args]
                 elif fields.tag in DIRECT_SET_TAGS:
