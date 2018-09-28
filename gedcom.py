@@ -81,25 +81,6 @@ def printDeceased(indi):
             pt.add_row(deceased)
     print(pt)
 
-def pt_ListLivingMarried(indi,  fam):
-    '''AP's User story 30 - List living married'''  
-    print('List living married')
-    pt = PrettyTable(field_names=['Husband', 'Wife'])
-    marriedFamilies = printListlivingmarried(indi,fam)
-    for family in marriedFamilies:
-        pt.add_row([indi[family.husband_id].name, indi[family.wife_id].name])
-    print(pt)           
-                                             
-def printListlivingmarried(indi, fam):
-    '''AP's User story 30 - List living married'''
-    married = list()
-    
-    for f in fam:
-        if fam[f].divorced == None and fam[f].husband_id != None and indi[fam[f].husband_id].death == None and \
-           fam[f].wife_id != None and indi[fam[f].wife_id].death == None:
-            married.append(fam[f])
-    return married
-
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
