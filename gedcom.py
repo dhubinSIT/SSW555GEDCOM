@@ -42,22 +42,27 @@ def printFamilies(indi, fam):
         wife_name = lookupname(indi,  fam[x].wife_id)
         pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,husband_name,fam[x].wife_id,wife_name,fam[x].children_id_list])
     print(pt)
-
-def printSiblings(indi, fam):
-    '''A's User story 28-Order Siblings by Age.'''
-    print('Siblings by their ages')
+    
+def printSiblings_help(siblingslist,indi, fam):
+    '''Refactor for unittest '''
     now = datetime.date.today()
+    siblings_age = dict() 
+    for z in siblingslist:
+        born = indi[z].birth
+        names = indi[z].name
+        integeryears = now.year - born.year - ((now.month, now.day) < (born.month, born.day))
+        siblings_age[names] = integeryears
+    return siblings_age
+
+def printSiblings(indi,fam):
+    '''AP's User story 28-Order Siblings by Age.'''
+    print('Siblings by their ages')
     for x in sorted(fam):
         pt = PrettyTable(field_names=['Siblings_Names','Siblings_Ages'])
-        siblingslist = fam[x].children_id_list
         siblings_age = dict()
-        for z in siblingslist:
-            born = indi[z].birth
-            names = indi[z].name
-            integeryears = now.year - born.year - ((now.month, now.day) < (born.month, born.day))
-            siblings_age[names] = integeryears
-    
-        for y in sorted(siblings_age, key=lambda y: siblings_age[y]): 
+        siblingslist = fam[x].children_id_list
+        siblings_age = printSiblings_help(siblingslist,indi,fam)
+        for y in sorted(siblings_age, key=lambda y: siblings_age[y], reverse=True): 
             age = siblings_age[y]
             pt.add_row([y, age])
         print(pt)
@@ -76,6 +81,25 @@ def printDeceased(indi):
             pt.add_row(deceased)
     print(pt)
 
+def pt_ListLivingMarried(indi,  fam):
+    '''AP's User story 30 - List living married'''  
+    print('List living married')
+    pt = PrettyTable(field_names=['Husband', 'Wife'])
+    marriedFamilies = printListlivingmarried(indi,fam)
+    for family in marriedFamilies:
+        pt.add_row([indi[family.husband_id].name, indi[family.wife_id].name])
+    print(pt)           
+                                             
+def printListlivingmarried(indi, fam):
+    '''AP's User story 30 - List living married'''
+    married = list()
+    
+    for f in fam:
+        if fam[f].divorced == None and fam[f].husband_id != None and indi[fam[f].husband_id].death == None and \
+           fam[f].wife_id != None and indi[fam[f].wife_id].death == None:
+            married.append(fam[f])
+    return married
+
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
@@ -88,6 +112,7 @@ def printWarnings(warnings):
         print()
         print("GEDCOM database is sane.")
 
+
 if __name__ == "__main__":
     '''Begin by opening the file '''
     with open (sys.argv[1], 'r') as f:
@@ -97,5 +122,6 @@ if __name__ == "__main__":
         printIndividuals(indi)
         printFamilies(indi, fam)
         printSiblings(indi, fam)
+        pt_ListLivingMarried(indi,  fam)
         printDeceased(indi)
         printWarnings(warnings)
