@@ -2,7 +2,7 @@
 #
 # David Hubin
 # Ayana Perry
-# Rakshith Varadaraju
+# Rakshith Varadarajurt5
 
 '''GEDCOM code to display the Individuals and Families using PrettyTable module'''
 import sys
@@ -43,10 +43,10 @@ def printFamilies(indi, fam):
         pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,husband_name,fam[x].wife_id,wife_name,fam[x].children_id_list])
     print(pt)
     
-def printSiblings_help(siblingslist,indi, fam):
+def US28_SiblingsByAge(siblingslist,indi, fam):
     '''Refactor for unittest '''
     now = datetime.date.today()
-    siblings_age = dict() 
+    siblings_age = dict()
     for z in siblingslist:
         born = indi[z].birth
         names = indi[z].name
@@ -54,20 +54,20 @@ def printSiblings_help(siblingslist,indi, fam):
         siblings_age[names] = integeryears
     return siblings_age
 
-def printSiblings(indi,fam):
-    '''AP's User story 28-Order Siblings by Age.'''
+def US28_SiblingsByAge_pt(indi,fam):
+    '''A's User story 28-Order Siblings by Age.'''
     print('Siblings by their ages')
     for x in sorted(fam):
         pt = PrettyTable(field_names=['Siblings_Names','Siblings_Ages'])
         siblings_age = dict()
         siblingslist = fam[x].children_id_list
-        siblings_age = printSiblings_help(siblingslist,indi,fam)
+        siblings_age = US28_SiblingsByAge(siblingslist,indi,fam)
         for y in sorted(siblings_age, key=lambda y: siblings_age[y], reverse=True): 
             age = siblings_age[y]
             pt.add_row([y, age])
         print(pt)
 
-def printDeceased(indi):
+def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
     print('List of Deceased')
     pt = PrettyTable(field_names=['Deceased_Names','Deceased_Date'])
@@ -96,13 +96,12 @@ def printWarnings(warnings):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open (sys.argv[1], 'r') as f:
+    with open ('C:/Users/username/Documents/StevensInstituteofTechnology/Fict-AP.ged', 'r') as f:
         (indi, fam,  parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi,  fam)
         
         printIndividuals(indi)
         printFamilies(indi, fam)
-        printSiblings(indi, fam)
-        pt_ListLivingMarried(indi,  fam)
-        printDeceased(indi)
+        US28_SiblingsByAge_pt(indi, fam)
+        US29_ListOfDeceased(indi)
         printWarnings(warnings)
