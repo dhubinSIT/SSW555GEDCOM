@@ -71,7 +71,6 @@ def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
     print('US29_List of Deceased')
     pt = PrettyTable(field_names=['Deceased_Names','Deceased_Date'])
-    print(indi)
     for x in (indi):
         deceased = list()
         if indi[x].death != None:
