@@ -2,7 +2,7 @@
 #
 # David Hubin
 # Ayana Perry
-# Rakshith Varadarajurt5
+# Rakshith Varadarajur
 
 '''GEDCOM code to display the Individuals and Families using PrettyTable module'''
 import sys
@@ -56,7 +56,7 @@ def US28_SiblingsByAge(siblingslist,indi, fam):
 
 def US28_SiblingsByAge_pt(indi,fam):
     '''A's User story 28-Order Siblings by Age.'''
-    print('Siblings by their ages')
+    print('US28_Siblings by their ages')
     for x in sorted(fam):
         pt = PrettyTable(field_names=['Siblings_Names','Siblings_Ages'])
         siblings_age = dict()
@@ -69,8 +69,9 @@ def US28_SiblingsByAge_pt(indi,fam):
 
 def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
-    print('List of Deceased')
+    print('US29_List of Deceased')
     pt = PrettyTable(field_names=['Deceased_Names','Deceased_Date'])
+    print(indi)
     for x in (indi):
         deceased = list()
         if indi[x].death != None:
@@ -80,6 +81,7 @@ def US29_ListOfDeceased(indi):
             deceased.append(died)
             pt.add_row(deceased)
     print(pt)
+    return(names)
 
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
@@ -105,3 +107,4 @@ if __name__ == "__main__":
         US28_SiblingsByAge_pt(indi, fam)
         US29_ListOfDeceased(indi)
         printWarnings(warnings)
+
