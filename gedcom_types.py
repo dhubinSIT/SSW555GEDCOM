@@ -36,7 +36,9 @@ class Individual:
         self.birth = None
         self.death = None
         self.child_family_ids = []
+        self.child_families = []
         self.spouse_family_ids = []
+        self.spouse_families = []
         
     def apply_value(self, gedcomTag,  value):
         '''This function determines which fields to add into the individual
@@ -51,6 +53,13 @@ class Individual:
             self.spouse_family_ids.append(value)
         else:
             setattr(self, Individual.TAG_MAP[gedcomTag], value)
+
+    def add_family_ref(self, ref, gedcomTag):
+        """Add an object reference for the associated tag."""
+        if gedcomTag == "FAMC":
+            self.child_families.append(ref)
+        elif gedcomTag == "FAMS":
+            self.spouse_families.append(ref)
 
     def validate(self):
         '''This function checks for the following errors
@@ -92,8 +101,11 @@ class Family:
         self.married = None
         self.divorced = None
         self.husband_id = None
+        self.husband = None
         self.wife_id = None
+        self.wife = None
         self.children_id_list = []
+        self.children_list = []
         
     def apply_value(self, gedcomTag,  value):
         '''This function determines which fields to add to the family
@@ -105,6 +117,17 @@ class Family:
             self.children_id_list.append(value)
         else:
             setattr(self, Family.TAG_MAP[gedcomTag], value)
+
+    def add_spouse_ref(self, ref, gedcomTag):
+        """Add an object reference to the associated tag field."""
+        if gedcomTag == "HUSB":
+            self.husband = ref
+        elif gedcomTag == "WIFE":
+            self.wife = ref
+            
+    def add_child_ref(self,  ref):
+        """Add an object reference for a child."""
+        self.children_list.append(ref)
 
     def validate(self):
         '''This function checks for the following errors
