@@ -65,7 +65,8 @@ class Individual:
         '''This function checks for the following errors
         US01 : Dates before current date.
         US03 : Birth should occur before death of an individual'''
-        return self._Check_Dates_Before_Today() + self._Check_Birth_Before_Death() # + self._Next_Validation_Routine()...
+        return self._Check_Dates_Before_Today() + self._Check_Birth_Before_Death() +\
+               self._Check_References() # + self._Next_Validation_Routine()...
 
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
@@ -82,7 +83,17 @@ class Individual:
         if self.birth != None and self.death != None and self.birth > self.death:
             warnings.append(Validation_Results("US03", 'Individual %s has a birth date after death date.' % self.id))
         return warnings
-
+        
+    def _Check_References(self):
+        warnings = []
+        for fam in self.spouse_families:
+            if self != fam.husband and self != fam.wife:
+                warnings.append(Validation_Results("US26",  "Individual %s references family %s as a spouse, but family does not have same reference." % (self.id,  fam.id)))
+        for fam in self.child_families:
+            if self not in fam.children_list:
+                warnings.append(Validation_Results("US26",  "Individual %s references family %s as a child, but family does not have same reference." % (self.id,  fam.id)))
+        return warnings
+        
 class Family:
     '''This is a datastructure to store information about a family.
     The datastructure currently holds values of family id, date of 
@@ -132,7 +143,8 @@ class Family:
     def validate(self):
         '''This function checks for the following errors
         US01 : Dates before current date.'''        
-        return self._Check_Dates_Before_Today() # + self._Next_Validation_Routine()...
+        return self._Check_Dates_Before_Today() +\
+               self._Check_References() # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
@@ -141,4 +153,15 @@ class Family:
             warnings.append(Validation_Results("US01", 'Family %s has a marriage date in the future.' % self.id))
         if self.divorced != None and self.divorced > datetime.today():
             warnings.append(Validation_Results("US01", 'Family %s has a divorce date in the future.' % self.id))
+        return warnings
+        
+    def _Check_References(self):
+        warnings = []
+        if self.husband != None and self not in self.husband.spouse_families:
+            warnings.append(Validation_Results("US26",  "Family %s references husband %s, but husband does not reference family." % (self.id,  self.husband_id)))
+        if self.wife != None and self not in self.wife.spouse_families:
+            warnings.append(Validation_Results("US26",  "Family %s references wife %s, but wife does not reference family." % (self.id,  self.wife_id)))
+        for child in self.children_list:
+            if self not in child.child_families:
+                warnings.append(Validation_Results("US26",  "Family %s references child %s, but child does not reference family." % (self.id,  child.id)))
         return warnings
