@@ -19,28 +19,26 @@ def datestring(d):
     else:
         return ""
 
-def lookupname(individuals, key):
-    if key == None:
-        return ""
-    else:
-        return individuals[key].name
+def lookupname(ref):
+    """Returns the string representing value, or a blank string if None"""
+    return (ref.name if (ref != None) else "")
 
-def printIndividuals(indi):
+def printIndividuals(individuals):
     '''Produce and print the table of individuals.'''
     print('Individuals')
     pt = PrettyTable(field_names=['ID','Name','Gender','Birthday','Death','Child','Spouse'])
-    for x in sorted(indi):
-        pt.add_row([indi[x].id,indi[x].name,indi[x].gender,datestring(indi[x].birth),datestring(indi[x].death),indi[x].child_family_ids,indi[x].spouse_family_ids])
+    for ind in sorted(individuals.values(),  key=lambda x: x.id):
+        pt.add_row([ind.id,ind.name,ind.gender,datestring(ind.birth),datestring(ind.death),ind.child_family_ids,ind.spouse_family_ids])
     print(pt)
 
-def printFamilies(indi, fam):
+def printFamilies(individuals, families):
     '''Produce and print the table of families.'''
     print('Families')
     pt = PrettyTable(field_names=['ID','Married','Divorced','Husband ID','Husband Name','Wife ID','Wife Name','Children'])
-    for x in sorted(fam):
-        husband_name = lookupname(indi, fam[x].husband_id)
-        wife_name = lookupname(indi,  fam[x].wife_id)
-        pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,husband_name,fam[x].wife_id,wife_name,fam[x].children_id_list])
+    for fam in sorted(families.values(),  key=lambda x: x.id):
+        husband_name = lookupname(fam.husband)
+        wife_name = lookupname(fam.wife)
+        pt.add_row([fam.id,datestring(fam.married),datestring(fam.divorced),fam.husband_id,husband_name,fam.wife_id,wife_name,fam.children_id_list])
     print(pt)
     
 def US28_SiblingsByAge(siblingslist,indi, fam):

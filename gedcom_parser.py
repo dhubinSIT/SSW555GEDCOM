@@ -6,7 +6,7 @@
 
 import datetime
 import re
-import gedcom_types
+from gedcom_types import Validation_Results, Individual,  Family,  Parser_Results
 
 # All of the valid tags in this subset of GEDCOM
 # Use named part of the regexp to make extraction easy.
@@ -40,19 +40,19 @@ DATE_TAGS = ["BIRT", "DEAT", "MARR", "DIV"]
 def Empty_Record (tag, id):
     """Helper function for making an empty record based on GEDCOM tag."""
     if tag == "INDI":
-        return gedcom_types.Individual(identifier = id)
+        return Individual(identifier = id)
     else:
-        return gedcom_types.Family (identifier = id)
+        return Family (identifier = id)
     
 def parse_line (line):
     """Take a single string and figure out whether it is valid."""
     for tag in TAGS:
         m = re.match(tag, line)
         if m != None:
-            return gedcom_types.Parser_Results(valid = True,
-                                               level = m.group('level'),
-                                               tag = m.group('tag'),
-                                               args = m.group('args'))
+            return Parser_Results(valid = True,
+                                  level = m.group('level'),
+                                  tag = m.group('tag'),
+                                  args = m.group('args'))
         
     # Didn't match anything... try badly leveled FAM or INDI
     m = re.match("(?P<level>\d)\s+(?P<args>.*)\s+(?P<tag>INDI|FAM)$",line)
@@ -61,10 +61,10 @@ def parse_line (line):
     if m == None:
         m = re.match("(?P<level>\d)\s+(?P<tag>\S+)\s+(?P<args>.*)", line)
     if m != None:
-        return gedcom_types.Parser_Results(valid = False,
-                                           level = m.group('level'),
-                                           tag = m.group('tag'),
-                                              args = m.group('args'))
+        return Parser_Results(valid = False,
+                              level = m.group('level'),
+                              tag = m.group('tag'),
+                              args = m.group('args'))
 
 def parse_date(str):
     """Attempt to parse a date string.  If not parse-able, return None."""
@@ -72,6 +72,42 @@ def parse_date(str):
         return datetime.datetime.strptime(str, "%d %b %Y")
     except:
         return None
+
+def assign_references (individuals,  families):
+    """Assign appropriate object references based on parsed identifiers.  This is
+    done after the entire parsing is complete, since now all objects are created.
+    Warnings are returned for any missing references."""
+    warnings = []
+    
+    for individual in individuals:
+        for id in individuals[individual].child_family_ids:
+            if id in families:
+                individuals[individual].add_family_ref(families[id], "FAMC")
+            else:
+                warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as child." % (individual, id)))
+        for id in individuals[individual].spouse_family_ids:
+            if id in families:
+                individuals[individual].add_family_ref(families[id], "FAMS")
+            else:
+                warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as spouse." % (individual, id)))
+    
+    for family in families:
+        if families[family].husband_id != None:
+            if families[family].husband_id in individuals:
+               families[family].add_spouse_ref(individuals[families[family].husband_id], "HUSB")
+            else:
+                warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as husband." % (family, families[family].husband_id)))
+        if families[family].wife_id != None:
+            if families[family].wife_id in individuals:
+               families[family].add_spouse_ref(individuals[families[family].wife_id], "WIFE")
+            else:
+                warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as wife." % (family, families[family].wife_id)))
+        for id in families[family].children_id_list:
+            if id in individuals:
+                families[family].add_child_ref(individuals[id])
+            else:
+                warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as child." % (family,  id)))
+    return warnings
 
 def parse_file (handle):
     """Parse lines from the file handle, and return a tuple of two dictionaries and a list.
@@ -110,11 +146,13 @@ def parse_file (handle):
                     if parsed_date != None:
                         data[stack[0]][stack[1]].apply_value(field_to_set, parsed_date)
                     else:
-                        warnings.append(gedcom_types.
+                        warnings.append(
                             Validation_Results("US42", "Date failed validation (%s) for %s (will skip setting date field %s):" %
                                                        (stack[1], fields.args,  field_to_set)))
             else:
                 print("Line failed parsing (invalid tag or bad level):" + line.strip())
         except:
             print("Unknown error parsing line:" + line.strip())
-    return (data['INDI'], data['FAM'],  warnings)
+            
+    reference_warnings = assign_references(data['INDI'], data['FAM'])
+    return (data['INDI'], data['FAM'],  warnings + reference_warnings)
