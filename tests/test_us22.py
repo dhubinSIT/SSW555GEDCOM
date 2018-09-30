@@ -39,19 +39,18 @@ class US22TestCase(unittest.TestCase):
 2 DATE 15 JUL 1973
 0 @F1@ FAM
 1 HUSB @I1@
-1 WIFE @I2@
 1 MARR
 2 DATE 15 JUL 1973
 1 DIV
 2 DATE 19 JUL 1974""")
         (ind,  fam,  parse_warns) = parse_file(buff)
-        self.assertTrue(len(parse_warns) >=  2)
         countus22 = 0
         for warn in parse_warns:
             countus22 += 1 if (warn.story == "US22") else 0
         self.assertEqual(countus22,  2)
         self.assertEqual(len(ind),  1)
         self.assertEqual(len(fam),  1)
-        self.assertEqual(ind["@I1@"].gender,  'F')  # demonstrates we kept the second entry
+        self.assertEqual(ind["@I1@"].gender,  'F')  # demonstrates we kept the second entry's value
+        self.assertEqual(ind["@I1@"].death,  None)  # demonstrates we had no left-over values from the first entry.
         self.assertTrue(fam["@F1@"].divorced > datetime(1974, 1, 1)) # demonstrates we kept the second entry
-
+        self.assertEqual(fam["@F1@"].wife,  None)    # demonstrate we had no left-over values from first entry.
