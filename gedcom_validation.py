@@ -15,7 +15,7 @@ def collect_validation_warnings(individuals,  families):
     for f in families.values():
         warnings = warnings + f.validate()
 
-    warnings = warnings + _US02_Birth_Before_Marriage(individuals, families)
+    warnings = warnings + _US02_Birth_Before_Marriage(individuals, families) + _US05_Death_Before_Marriage(individuals, families)
     return warnings
 
 def _US02_Birth_Before_Marriage(individuals, families):
@@ -26,4 +26,14 @@ def _US02_Birth_Before_Marriage(individuals, families):
                 warnings.append(Validation_Results("US02", 'Individual %s has a birth date after marriage date.' % families[fam].husband_id))
             if families[fam].wife_id != None and individuals[families[fam].wife_id].birth != None and individuals[families[fam].wife_id].birth > families[fam].married:
                 warnings.append(Validation_Results("US02", 'Individual %s has a birth date after marriage date.' % families[fam].wife_id))        
+    return warnings
+
+def _US05_Death_Before_Marriage(individuals, families):
+    warnings = []
+    for fam in families:
+        if families[fam].married != None:
+            if families[fam].husband_id != None and individuals[families[fam].husband_id].death != None and individuals[families[fam].husband_id].death < families[fam].married:
+                warnings.append(Validation_Results("US05", 'Individual %s has a death date before marriage date.' % families[fam].husband_id))
+            if families[fam].wife_id != None and individuals[families[fam].wife_id].death != None and individuals[families[fam].wife_id].death < families[fam].married:
+                warnings.append(Validation_Results("US05", 'Individual %s has a death date before marriage date.' % families[fam].wife_id))        
     return warnings
