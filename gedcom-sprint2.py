@@ -19,26 +19,28 @@ def datestring(d):
     else:
         return ""
 
-def lookupname(ref):
-    """Returns the string representing value, or a blank string if None"""
-    return (ref.name if (ref != None) else "")
+def lookupname(individuals, key):
+    if key == None:
+        return ""
+    else:
+        return individuals[key].name
 
-def printIndividuals(individuals):
+def printIndividuals(indi):
     '''Produce and print the table of individuals.'''
     print('Individuals')
     pt = PrettyTable(field_names=['ID','Name','Gender','Birthday','Death','Child','Spouse'])
-    for ind in sorted(individuals.values(),  key=lambda x: x.id):
-        pt.add_row([ind.id,ind.name,ind.gender,datestring(ind.birth),datestring(ind.death),ind.child_family_ids,ind.spouse_family_ids])
+    for x in sorted(indi):
+        pt.add_row([indi[x].id,indi[x].name,indi[x].gender,datestring(indi[x].birth),datestring(indi[x].death),indi[x].child_family_ids,indi[x].spouse_family_ids])
     print(pt)
 
-def printFamilies(individuals, families):
+def printFamilies(indi, fam):
     '''Produce and print the table of families.'''
     print('Families')
     pt = PrettyTable(field_names=['ID','Married','Divorced','Husband ID','Husband Name','Wife ID','Wife Name','Children'])
-    for fam in sorted(families.values(),  key=lambda x: x.id):
-        husband_name = lookupname(fam.husband)
-        wife_name = lookupname(fam.wife)
-        pt.add_row([fam.id,datestring(fam.married),datestring(fam.divorced),fam.husband_id,husband_name,fam.wife_id,wife_name,fam.children_id_list])
+    for x in sorted(fam):
+        husband_name = lookupname(indi, fam[x].husband_id)
+        wife_name = lookupname(indi,  fam[x].wife_id)
+        pt.add_row([fam[x].id,datestring(fam[x].married),datestring(fam[x].divorced),fam[x].husband_id,husband_name,fam[x].wife_id,wife_name,fam[x].children_id_list])
     print(pt)
     
 def US28_SiblingsByAge(siblingslist,indi, fam):
@@ -67,8 +69,8 @@ def US28_SiblingsByAge_pt(indi,fam):
 
 def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
-    print('US29_List of Deceased')
     pt = PrettyTable(field_names=['Deceased_Names','Deceased_Date'])
+    print(indi)
     for x in (indi):
         deceased = list()
         if indi[x].death != None:
@@ -113,7 +115,6 @@ def US31_Listofliving(indi):
     print(pt)
     return(names)
 
-
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
@@ -129,7 +130,7 @@ def printWarnings(warnings):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open (sys.argv[1], 'r') as f:
+    with open ('C:/Users/Ayana Perry/Documents/StevensInstituteofTechnology/Project01_Varadaraju.ged', 'r') as f:
         (indi, fam,  parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi,  fam)
         
