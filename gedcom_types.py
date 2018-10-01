@@ -144,7 +144,9 @@ class Family:
         '''This function checks for the following errors
         US01 : Dates before current date.'''        
         return self._Check_Dates_Before_Today() +\
-               self._Check_References() # + self._Next_Validation_Routine()...
+               self._Check_References() +\
+               self._Check_Marriage_Before_Divorce()
+                # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
@@ -164,4 +166,11 @@ class Family:
         for child in self.children_list:
             if self not in child.child_families:
                 warnings.append(Validation_Results("US26",  "Family %s references child %s, but child does not reference family." % (self.id,  child.id)))
+        return warnings
+
+    def _Check_Marriage_Before_Divorce(self):
+        '''Validation routine for US04: Marriage date before Divorce date'''
+        warnings = []
+        if self.married != None and self.divorced != None and self.married > self.divorced:
+            warnings.append(Validation_Results("US04", 'Family %s has a marriage date after divorce date.' % self.id))
         return warnings
