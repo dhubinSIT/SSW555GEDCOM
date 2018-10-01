@@ -78,7 +78,7 @@ def US29_ListOfDeceased(indi):
             deceased.append(died)
             pt.add_row(deceased)
     print(pt)
-    return(names)
+    return names
 
 def US30_ListLivingMarried_pt(indi,fam):
     '''AP's User story 30 - List living married'''  
@@ -111,7 +111,7 @@ def US31_Listofliving(indi):
             living.append(alive)
             pt.add_row(living)
     print(pt)
-    return(names)
+    #return names
 
 
 def printWarnings(warnings):
