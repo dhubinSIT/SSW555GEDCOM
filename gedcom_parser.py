@@ -82,24 +82,24 @@ def assign_references (individuals,  families):
     for individual in individuals:
         for id in individuals[individual].child_family_ids:
             if id in families:
-                individuals[individual].add_family_ref(families[id], "FAMC")
+                individuals[individual].add_family_ref("FAMC", families[id])
             else:
                 warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as child." % (individual, id)))
         for id in individuals[individual].spouse_family_ids:
             if id in families:
-                individuals[individual].add_family_ref(families[id], "FAMS")
+                individuals[individual].add_family_ref("FAMS", families[id])
             else:
                 warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as spouse." % (individual, id)))
     
     for family in families:
         if families[family].husband_id != None:
             if families[family].husband_id in individuals:
-               families[family].add_spouse_ref(individuals[families[family].husband_id], "HUSB")
+               families[family].add_spouse_ref("HUSB", individuals[families[family].husband_id])
             else:
                 warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as husband." % (family, families[family].husband_id)))
         if families[family].wife_id != None:
             if families[family].wife_id in individuals:
-               families[family].add_spouse_ref(individuals[families[family].wife_id], "WIFE")
+               families[family].add_spouse_ref("WIFE", individuals[families[family].wife_id])
             else:
                 warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as wife." % (family, families[family].wife_id)))
         for id in families[family].children_id_list:

@@ -54,7 +54,7 @@ class Individual:
         else:
             setattr(self, Individual.TAG_MAP[gedcomTag], value)
 
-    def add_family_ref(self, ref, gedcomTag):
+    def add_family_ref(self, gedcomTag, ref):
         """Add an object reference for the associated tag."""
         if gedcomTag == "FAMC":
             self.child_families.append(ref)
@@ -129,7 +129,7 @@ class Family:
         else:
             setattr(self, Family.TAG_MAP[gedcomTag], value)
 
-    def add_spouse_ref(self, ref, gedcomTag):
+    def add_spouse_ref(self, gedcomTag, ref):
         """Add an object reference to the associated tag field."""
         if gedcomTag == "HUSB":
             self.husband = ref
