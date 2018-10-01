@@ -80,6 +80,40 @@ def US29_ListOfDeceased(indi):
     print(pt)
     return(names)
 
+def US30_ListLivingMarried_pt(indi,fam):
+    '''AP's User story 30 - List living married'''  
+    print('List living married')
+    pt = PrettyTable(field_names=['Husband', 'Wife'])
+    marriedFamilies = US30_Listlivingmarried_main(indi,fam)
+    for family in marriedFamilies:
+        pt.add_row([indi[family.husband_id].name, indi[family.wife_id].name])
+    print(pt)    
+
+def US30_Listlivingmarried_main(indi,fam):
+    '''AP's User story 30 - List living married'''
+    married = list()
+    for f in fam:
+        if fam[f].divorced == None and fam[f].husband_id != None and indi[fam[f].husband_id].death == None and \
+           fam[f].wife_id != None and indi[fam[f].wife_id].death == None:
+            married.append(fam[f])
+    return married
+
+def US31_Listofliving(indi):
+    """ AP User story 31 - List of Living """
+    pt = PrettyTable(field_names=['Living Names','Birthdays'])
+    print('List of Living')
+    for i in sorted(indi):
+        living = list()
+        if indi[i].death == None:
+            alive = datestring(indi[i].birth)
+            names = indi[i].name
+            living.append(names)
+            living.append(alive)
+            pt.add_row(living)
+    print(pt)
+    return(names)
+
+
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
@@ -103,5 +137,7 @@ if __name__ == "__main__":
         printFamilies(indi, fam)
         US28_SiblingsByAge_pt(indi, fam)
         US29_ListOfDeceased(indi)
+        US30_ListLivingMarried_pt(indi,fam)
+        US31_Listofliving(indi)
         printWarnings(warnings)
 
