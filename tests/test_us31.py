@@ -21,11 +21,10 @@ class US31TestCase(unittest.TestCase):
         """List of Living."""
         self.assertFalse(US31_Listofliving({'@okay1@': self.OkayIndi1}) == 'Princess Kate')
 
-        # UnitTest function
+# UnitTest function
+def main():
+    '''main() function'''
 
-        def main():
-            '''main() function'''
-
-    if __name__ == "__main__":
-        unittest.main(exit=False, verbosity=2)
-        main()
+if __name__ == "__main__":
+    unittest.main(exit=False, verbosity=2)
+    main()
