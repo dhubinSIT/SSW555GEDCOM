@@ -162,3 +162,14 @@
 1 WIFE @US26_I2@
 1 CHIL @US26_I3@
 1 CHIL @US26_I4@
+0 NOTE The following help demonstrate US22, Duplicate Entries
+0 @US22_Dupe_Indi@ INDI
+1 NAME First /Dupe/
+0 @US22_Dupe_Indi@ INDI
+1 NAME Second /Dupe/
+0 @US22_Dupe_Fam@ FAM
+1 MARR
+2 DATE 1 JAN 2001
+0 @US22_Dupe_Fam@ FAM
+1 MARR
+2 DATE 2 FEB 2002
