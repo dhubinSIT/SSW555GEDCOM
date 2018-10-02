@@ -100,7 +100,7 @@ def US30_Listlivingmarried_main(indi,fam):
 
 def US31_Listofliving(indi):
     """ AP User story 31 - List of Living """
-    pt = PrettyTable(field_names=['Living Names','Birthdays'])
+    pt = PrettyTable(field_names=['Living Names', 'Birthdays'])
     print('List of Living')
     for i in sorted(indi):
         living = list()
@@ -108,10 +108,9 @@ def US31_Listofliving(indi):
             alive = datestring(indi[i].birth)
             names = indi[i].name
             living.append(names)
-            living.append(alive)
-            pt.add_row(living)
+            pt.add_row([names,alive])
     print(pt)
-    #return names
+    return living
 
 
 def printWarnings(warnings):
