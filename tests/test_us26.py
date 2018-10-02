@@ -68,6 +68,16 @@ class US26TestCase(unittest.TestCase):
 1 CHIL @ImissingC@""")
         (ind,  fam,  warns) = parse_file(buff)
         self.assertTrue(len([x for x in warns if x.story == "US26"]) == 5)
+        self.assertTrue(ind['@I1@'].spouse_family_ids == [])
+        self.assertTrue(ind['@I1@'].spouse_families == [])
+        self.assertTrue(ind['@I1@'].child_family_ids == [])
+        self.assertTrue(ind['@I1@'].child_families == [])
+        self.assertTrue(fam['@F1@'].husband_id == None)
+        self.assertTrue(fam['@F1@'].husband == None)
+        self.assertTrue(fam['@F1@'].wife_id == None)
+        self.assertTrue(fam['@F1@'].wife == None)
+        self.assertTrue(fam['@F1@'].children_id_list == [])
+        self.assertTrue(fam['@F1@'].children_list == [])
         
     def test_everything_fine(self):
         """Test that an okay GEDCOM file is reported with no warnings."""
@@ -88,4 +98,14 @@ class US26TestCase(unittest.TestCase):
         validation_warns = collect_validation_warnings(ind,  fam)
         us26_warns = [x for x in warns + validation_warns if x.story == "US26"]
         self.assertTrue(len(us26_warns) == 0)
+        
+        self.assertTrue(fam['@F1@'] in ind['@I1@'].child_families)
+        self.assertTrue(fam['@F1@'] in ind['@I2@'].child_families)
+        self.assertTrue(fam['@F1@'] in ind['@I3@'].spouse_families)
+        self.assertTrue(fam['@F1@'] in ind['@I4@'].spouse_families)
+        
+        self.assertTrue(ind['@I3@'] == fam['@F1@'].husband)
+        self.assertTrue(ind['@I4@'] == fam['@F1@'].wife)
+        self.assertTrue(ind['@I1@'] in fam['@F1@'].children_list)
+        self.assertTrue(ind['@I2@'] in fam['@F1@'].children_list)
         
