@@ -39,7 +39,8 @@ class US26TestCase(unittest.TestCase):
         self.assertTrue(len([x for x in fam_warns if "@I4@" in x.message and "child" in x.message]) == 1) # mismatch of other child
         
     def test_mismatched_individual_references(self):
-        """Test mismatched references."""
+        """Test mismatched references.  The individual I1 should be a spouse of the family,
+        and I2 should be a child of the family, but the family has them in opposite roles."""
         buff = StringIO("""0 @I1@ INDI
 1 FAMS @F1@
 0 @I2@ INDI
