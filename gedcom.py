@@ -120,6 +120,7 @@ def printWarnings(warnings):
         pt = PrettyTable(field_names=['Code', 'Message'])
         for warn in warnings:
             pt.add_row([warn.story,  warn.message])
+        pt.sortby = "Code"
         print(pt)
     else:
         print()
