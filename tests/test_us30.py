@@ -6,18 +6,23 @@
 
 import unittest
 from gedcom import *
-from gedcom_types import Individual
+from gedcom_types import *
 from gedcom_parser import parse_date
 
 class US30TestCase(unittest.TestCase):
     def setUp(self):
         self.OkayIndi1 = Individual('@okay1@')
-        self.OkayIndi1.apply_value('DEAT', parse_date('1 JUN 1945'))
+        self.OkayIndi2 = Individual('@okay2@')
+        self.OkayIndi1.apply_value('BIRT', parse_date('1 JUN 1945'))
+        self.OkayIndi2.apply_value('BIRT', parse_date('1 JUN 1945'))
         self.OkayIndi1.apply_value('NAME', 'Prince William')
+        self.OkayIndi2.apply_value('NAME', 'Princess Kate')
+        self.OkayFam = Family('@okayf@')
+
 
     def test_US30_Listlivingmarried_main(self):
-        """List of Living."""
-        self.assertFalse(US30_Listlivingmarried_main({'@okay1@': self.OkayIndi1}) != 'Prince William')
+        """List of Living Married."""
+        LivingMarried = US30_Listlivingmarried_main(self.OkayFam.husband_id,{'@okay1@' : self.OkayIndi1,'@okay2@': self.OkayIndi2})
         self.assertTrue(US30_Listlivingmarried_main({'@okay1@': self.OkayIndi1}) == 'Prince William')
 
 #UnitTest function 
@@ -26,4 +31,4 @@ def main():
           
 if __name__ == "__main__":
     unittest.main(exit=False, verbosity=2)
-    main()
+    main() 
