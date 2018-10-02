@@ -76,20 +76,26 @@ def parse_date(str):
 def assign_references (individuals,  families):
     """Assign appropriate object references based on parsed identifiers.  This is
     done after the entire parsing is complete, since now all objects are created.
-    Warnings are returned for any missing references."""
+    For any missing references, warnings are returned and the missing reference
+    is removed from the appropriate field."""
     warnings = []
     
     for individual in individuals:
-        for id in individuals[individual].child_family_ids:
-            if id in families:
-                individuals[individual].add_family_ref("FAMC", families[id])
-            else:
-                warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as child." % (individual, id)))
-        for id in individuals[individual].spouse_family_ids:
-            if id in families:
-                individuals[individual].add_family_ref("FAMS", families[id])
-            else:
-                warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as spouse." % (individual, id)))
+        good_child_families = [x for x in individuals[individual].child_family_ids if x in families]
+        bad_child_families = [x for x in individuals[individual].child_family_ids if x not in families]
+        for id in good_child_families:
+            individuals[individual].add_family_ref("FAMC", families[id])
+        for id in bad_child_families:
+            warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as child." % (individual, id)))
+            individuals[individual].child_family_ids.remove(id)
+        
+        good_spouse_families = [x for x in individuals[individual].spouse_family_ids if x in families]
+        bad_spouse_families = [x for x in individuals[individual].spouse_family_ids if x not in families]
+        for id in good_spouse_families:
+            individuals[individual].add_family_ref("FAMS", families[id])
+        for id in bad_spouse_families:
+            warnings.append(Validation_Results("US26", "Individual %s references unknown family %s as spouse." % (individual, id)))
+            individuals[individual].spouse_family_ids.remove(id)
     
     for family in families:
         if families[family].husband_id != None:
@@ -97,16 +103,23 @@ def assign_references (individuals,  families):
                families[family].add_spouse_ref("HUSB", individuals[families[family].husband_id])
             else:
                 warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as husband." % (family, families[family].husband_id)))
+                families[family].husband_id = None
+                
         if families[family].wife_id != None:
             if families[family].wife_id in individuals:
                families[family].add_spouse_ref("WIFE", individuals[families[family].wife_id])
             else:
                 warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as wife." % (family, families[family].wife_id)))
-        for id in families[family].children_id_list:
-            if id in individuals:
-                families[family].add_child_ref(individuals[id])
-            else:
-                warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as child." % (family,  id)))
+                families[family].wife_id = None
+        
+        good_children_list = [x for x in families[family].children_id_list if x in individuals]
+        bad_children_list = [x for x in families[family].children_id_list if x not in individuals]
+        for id in good_children_list:
+            families[family].add_child_ref(individuals[id])
+        for id in bad_children_list:
+            warnings.append(Validation_Results("US26", "Family %s references unknown individual %s as child." % (family,  id)))
+            families[family].children_id_list.remove(id)
+            
     return warnings
 
 def parse_file (handle):
