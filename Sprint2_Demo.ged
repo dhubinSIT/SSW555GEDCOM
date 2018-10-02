@@ -1,0 +1,149 @@
+0 HEAD
+0 NOTE Group for Ayana, David, Rakshith
+0 NOTE The following help demonsrate US02, Birth before Marriage
+0 @US02_I7@ INDI
+1 NAME Maddye /Simmons/
+1 SEX F
+1 BIRT
+2 DATE 11 JUL 2013
+1 FAMS @US03_US02_US28_F8@
+0 NOTE The following help demonstate US03, Birth before Death
+0 @US03_I5@ INDI
+1 NAME Derek /Simmons/
+1 SEX M
+1 FAMS @US03_US02_US28_F8@
+1 BIRT
+2 DATE 16 JAN 1964
+1 DEAT
+2 DATE 15 JAN 1964
+0 NOTE The following help demonstrate US28, Siblings by Age
+0 @US28_I1@ INDI
+1 NAME Marie /Simmons/
+1 SEX F
+1 BIRT
+2 DATE 26 NOV 1980
+1 FAMC @US28_US29_F1@
+0 @US28_I5@ INDI
+1 NAME Lucy /Simmons/
+1 SEX F
+1 BIRT
+2 DATE 27 NOV 1980
+1 FAMC @US28_US29_F1@
+0 @US28_I4@ INDI
+1 NAME Patrick /Simmons/
+1 SEX M
+1 BIRT
+2 DATE 6 DEC 1978
+1 FAMC @US28_US29_F1@
+0 @US28_I16@ INDI
+1 NAME Christopher /Blake/
+1 SEX M
+1 BIRT
+2 DATE 8 JUL 1969
+1 FAMC @US03_US02_US28_F8@
+0 @US28_I20@ INDI
+1 NAME Eric /Blake/
+1 SEX M
+1 BIRT
+2 DATE 4 AUG 1993
+1 FAMC @US03_US02_US28_F8@
+0 NOTE Cover a combination of US03 and US02 and US28
+0 @US03_US02_US28_F8@ FAM
+1 HUSB @US03_I5@
+1 WIFE @US02_I7@
+1 CHIL @US28_I16@
+1 CHIL @US28_I20@
+1 MARR
+2 DATE 1 JAN 1965
+0 NOTE The following help demonstate US29, Deceased Individuals
+0 @US29_I13@ INDI
+1 NAME James /Simmons/
+1 SEX M
+1 BIRT
+2 DATE 17 SEP 1912
+1 DEAT Y
+2 DATE 14 APR 1989
+1 FAMS @US28_US29_F1@
+0 @US29_I3@ INDI
+1 NAME Pat /Simmons/
+1 SEX F
+1 BIRT
+2 DATE 26 JAN 1944
+1 FAMS @US28_US29_F1@
+1 DEAT
+2 DATE 26 MAY 1990
+0 NOTE Family to tie together US28 and US29
+0 @US28_US29_F1@ FAM
+1 HUSB @US29_I13@
+1 WIFE @US29_I3@
+1 CHIL @US28_I1@
+1 CHIL @US28_I4@
+1 CHIL @US28_I5@
+1 MARR
+2 DATE 28 FEB 1976
+0 NOTE The following help demonstrate US01, Dates before Current Date
+0 @US01_I4@ INDI
+1 NAME TerseTim /Yodeler/
+1 SEX M
+1 BIRT
+2 DATE 2 JUN 1962
+1 DEAT
+2 DATE 11 NOV 2995
+1 FAMS @US01_F3@
+0 @US01_I3@ INDI
+1 NAME SnarkySally /Yodeler/
+1 SEX F
+1 BIRT
+2 DATE 1 JUN 2961
+1 FAMS @US01_F3@
+0 @US01_F3@ FAM
+1 HUSB @US01_I4@
+1 WIFE @US01_I3@
+1 MARR
+2 DATE 1 JAN 2985
+1 DIV
+2 DATE 15 JAN 2986
+0 NOTE The following help demonstate US42, Illegal Dates
+0 @US42_I1@ INDI
+1 NAME CrankyFrank /Coffin/
+1 SEX M
+1 BIRT
+2 DATE 32 JAN 1940
+1 DEAT
+2 DATE 29 FEB 1941
+1 FAMS @US42_F1@
+0 NOTE Also check unparseable dates for US42
+0 @US42_I2@ INDI
+1 NAME MarvelousMay /Coffin/
+1 SEX F
+1 BIRT
+2 DATE 15/MAY/1941
+1 FAMS @US42_F1@
+0 @US42_F1@ FAM
+1 HUSB @US42_I1@
+1 WIFE @US42_I2@
+1 MARR
+2 DATE 02/01/1960
+1 DIV
+2 DATE 02-01-1970
+0 NOTE The following help demonstrate US26, Mismatched/Missing References
+0 @US26_I1_All_Miss@ INDI
+1 FAMS @US26_FmissingS@
+1 FAMC @US26_FmissingC@
+0 @US26_F1_All_Miss@ FAM
+1 WIFE @US26_ImissingW@
+1 HUSB @US26_ImissingH@
+1 CHIL @US26_ImissingC@
+0 @US26_I1@ INDI
+1 FAMC @US26_F1@
+0 @US26_I2@ INDI
+1 FAMC @US26_F1@
+0 @US26_I3@ INDI
+1 FAMS @US26_F1@
+0 @US26_I4@ INDI
+1 FAMS @US26_F1@
+0 @US26_F1@ FAM
+1 HUSB @US26_I1@
+1 WIFE @US26_I2@
+1 CHIL @US26_I3@
+1 CHIL @US26_I4@
