@@ -134,6 +134,7 @@ def printWarnings(warnings):
         pt = PrettyTable(field_names=['Code', 'Message'])
         for warn in warnings:
             pt.add_row([warn.story, warn.message])
+        pt.sortby = "Code"
         print(pt)
     else:
         print()
@@ -142,7 +143,7 @@ def printWarnings(warnings):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open('C:/Users/Ayana Perry/Documents/StevensInstituteofTechnology/Hubin_fictional_family.ged', 'r') as f:
+    with open(sys.argv[1], 'r') as f:
         (indi, fam, parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi, fam)
 
