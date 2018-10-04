@@ -10,7 +10,7 @@ from gedcom_types import Individual, Family
 from gedcom_parser import parse_date, parse_file
 from gedcom_validation import collect_validation_warnings, _US02_Birth_Before_Marriage
 
-class US03TestCase(unittest.TestCase):
+class US02TestCase(unittest.TestCase):
     def shortDescription(self):
         '''Disable printing docstring on verbose'''
         return None
@@ -22,6 +22,7 @@ class US03TestCase(unittest.TestCase):
         self.OkayIndi.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.OkayFam.apply_value('MARR', parse_date('1 JUN 1975'))
         self.OkayFam.apply_value('HUSB', '@okay@')
+        self.OkayFam.add_spouse_ref('HUSB', self.OkayIndi)
 
         self.BadBirth = Individual('@birth@')
         self.BadFam = Family('@badf@')
@@ -29,19 +30,21 @@ class US03TestCase(unittest.TestCase):
         self.BadBirth.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.BadFam.apply_value('MARR', parse_date('6 JAN 1995'))
         self.BadFam.apply_value('HUSB', '@birth@')
+        self.BadFam.add_spouse_ref('HUSB', self.BadBirth)
 
         self.MissingBirth = Individual('@nobirth@')
         self.MissingBirthFam = Family('@badfnb@')
         self.MissingBirth.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.MissingBirthFam.apply_value('MARR', parse_date('6 JAN 1995'))
         self.MissingBirthFam.apply_value('HUSB', '@nobirth@')
+        self.MissingBirthFam.add_spouse_ref('HUSB', self.MissingBirth)
 
         self.MissingMarr = Individual('@nomarr@')
         self.MissingMarrFam = Family('@badfnm@')
         self.MissingMarr.apply_value('BIRT', parse_date('7 JAN 1995'))
         self.MissingMarr.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.MissingMarrFam.apply_value('HUSB', '@nomarr@')
-		
+        self.MissingMarrFam.add_spouse_ref('HUSB', self.MissingMarr)
 		
     def test_birth_before_marr(self):
         '''Test warnings if date of birth is after date of marriage'''

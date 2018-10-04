@@ -21,22 +21,26 @@ class US05TestCase(unittest.TestCase):
         self.OkayIndi.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.OkayFam.apply_value('MARR', parse_date('1 JUN 1975'))
         self.OkayFam.apply_value('HUSB', '@okay@')
+        self.OkayFam.add_spouse_ref('HUSB',self.OkayIndi)
 
         self.BadDeath = Individual('@death@')
         self.BadFam = Family('@badf@')
         self.BadDeath.apply_value('DEAT', parse_date('5 JAN 1995'))
         self.BadFam.apply_value('MARR', parse_date('6 JAN 1995'))
         self.BadFam.apply_value('HUSB', '@death@')
+        self.BadFam.add_spouse_ref('HUSB', self.BadDeath)
 
         self.MissingDeath = Individual('@nodeath@')
         self.MissingDeathFam = Family('@badfnd@')
         self.MissingDeathFam.apply_value('MARR', parse_date('6 JAN 1995'))
         self.MissingDeathFam.apply_value('HUSB', '@nodeath@')
+        self.MissingDeathFam.add_spouse_ref('HUSB', self.MissingDeath)
 
         self.MissingMarr = Individual('@nomarr@')
         self.MissingMarrFam = Family('@badfnm@')
         self.MissingMarr.apply_value('DEAT', parse_date('6 JAN 1995'))
         self.MissingMarrFam.apply_value('HUSB', '@nomarr@')
+        self.MissingMarrFam.add_spouse_ref('HUSB', self.MissingMarr)
 
     def test_death_before_marr(self):
         '''Test warnings if date of death is before date of marriage'''

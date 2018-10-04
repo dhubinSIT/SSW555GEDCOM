@@ -22,18 +22,18 @@ def _US02_Birth_Before_Marriage(individuals, families):
     warnings = []
     for fam in families:
         if families[fam].married != None:
-            if families[fam].husband_id != None and individuals[families[fam].husband_id].birth != None and individuals[families[fam].husband_id].birth > families[fam].married:
+            if families[fam].husband_id != None and families[fam].husband.birth != None and families[fam].husband.birth > families[fam].married:
                 warnings.append(Validation_Results("US02", 'Individual %s has a birth date after marriage date.' % families[fam].husband_id))
-            if families[fam].wife_id != None and individuals[families[fam].wife_id].birth != None and individuals[families[fam].wife_id].birth > families[fam].married:
-                warnings.append(Validation_Results("US02", 'Individual %s has a birth date after marriage date.' % families[fam].wife_id))        
+            if families[fam].wife_id != None and families[fam].wife.birth != None and families[fam].wife.birth > families[fam].married:
+                warnings.append(Validation_Results("US02", 'Individual %s has a birth date after marriage date.' % families[fam].wife_id))
     return warnings
 
 def _US05_Death_Before_Marriage(individuals, families):
     warnings = []
     for fam in families:
         if families[fam].married != None:
-            if families[fam].husband_id != None and individuals[families[fam].husband_id].death != None and individuals[families[fam].husband_id].death < families[fam].married:
+            if families[fam].husband_id != None and families[fam].husband.death != None and families[fam].husband.death < families[fam].married:
                 warnings.append(Validation_Results("US05", 'Individual %s has a death date before marriage date.' % families[fam].husband_id))
-            if families[fam].wife_id != None and individuals[families[fam].wife_id].death != None and individuals[families[fam].wife_id].death < families[fam].married:
+            if families[fam].wife_id != None and families[fam].wife.death != None and families[fam].wife.death < families[fam].married:
                 warnings.append(Validation_Results("US05", 'Individual %s has a death date before marriage date.' % families[fam].wife_id))        
     return warnings
