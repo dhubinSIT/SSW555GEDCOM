@@ -16,7 +16,7 @@ import gedcom_validation
 def datestring(d):
     """Pretty-print a date for output."""
     if d != None:
-        return datetime.datetime.strftime(d, "%d %b %Y")
+        return str(d)
     else:
         return ""
 
