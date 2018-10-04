@@ -18,12 +18,17 @@ class US30TestCase(unittest.TestCase):
         self.OkayIndi1.apply_value('NAME', 'Prince William')
         self.OkayIndi2.apply_value('NAME', 'Princess Kate')
         self.OkayFam = Family('@okayf@')
+        self.OkayFam.apply_value('HUSB', '@okay1@')
+        self.OkayFam.apply_value('WIFE', '@okay2@')
 
 
     def test_US30_Listlivingmarried_main(self):
         """List of Living Married."""
-        LivingMarried = US30_Listlivingmarried_main(self.OkayFam.husband_id,{'@okay1@' : self.OkayIndi1,'@okay2@': self.OkayIndi2})
-        self.assertTrue(US30_Listlivingmarried_main({'@okay1@': self.OkayIndi1}) == 'Prince William')
+        LivingMarried = US30_Listlivingmarried_main({'@okay1@': self.OkayIndi1,'@okay2@': self.OkayIndi2},\
+                                                    {'@okayf@': self.OkayFam})
+        self.assertTrue(self.OkayFam in LivingMarried)
+        self.assertTrue(self.OkayIndi1, self.OkayFam in LivingMarried)
+        self.assertIsNot(self.OkayIndi1, self.OkayFam in LivingMarried)
 
 #UnitTest function 
 def main():
