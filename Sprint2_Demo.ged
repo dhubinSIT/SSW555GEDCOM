@@ -128,6 +128,9 @@
 2 DATE 02-01-1970
 0 NOTE The following help demonstrate US26, Mismatched/Missing References
 0 @US26_I1_All_Miss@ INDI
+1 NAME Anthony /Amnesiac/
+1 BIRT
+2 DATE 1 JUL 1950
 1 FAMS @US26_FmissingS@
 1 FAMC @US26_FmissingC@
 0 @US26_F1_All_Miss@ FAM
@@ -135,15 +138,38 @@
 1 HUSB @US26_ImissingH@
 1 CHIL @US26_ImissingC@
 0 @US26_I1@ INDI
+1 NAME Amos /Amnesiac/
+1 BIRT
+2 DATE 1 MAY 1977
 1 FAMC @US26_F1@
 0 @US26_I2@ INDI
+1 NAME Andy /Amnesiac/
+1 BIRT
+2 DATE 1 APR 1979
 1 FAMC @US26_F1@
 0 @US26_I3@ INDI
+1 NAME Abby /Amnesiac/
+1 BIRT
+2 DATE 1 MAR 1951
 1 FAMS @US26_F1@
 0 @US26_I4@ INDI
+1 NAME Alex /Amnesiac/
+1 BIRT
+2 DATE 1 FEB 1950
 1 FAMS @US26_F1@
 0 @US26_F1@ FAM
 1 HUSB @US26_I1@
 1 WIFE @US26_I2@
 1 CHIL @US26_I3@
 1 CHIL @US26_I4@
+0 NOTE The following help demonstrate US22, Duplicate Entries
+0 @US22_Dupe_Indi@ INDI
+1 NAME First /Dupe/
+0 @US22_Dupe_Indi@ INDI
+1 NAME Second /Dupe/
+0 @US22_Dupe_Fam@ FAM
+1 MARR
+2 DATE 1 JAN 2001
+0 @US22_Dupe_Fam@ FAM
+1 MARR
+2 DATE 2 FEB 2002
