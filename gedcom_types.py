@@ -13,6 +13,25 @@ Parser_Results = namedtuple("Parser_Results", ['valid', 'level', 'tag', 'args'])
 Validation_Results = namedtuple("Validation_Results", ['story',  'message'])
 """Holder for validation issues."""
 
+class GedcomDate(datetime):
+    """This subclass of datetime is intended to provide functionality
+    specific to the parsing, rendering, and validation of GEDCOM datestrings."""
+    
+    # How one deals with subclassing an immutable object class was not entirely obvious.
+    # https://stackoverflow.com/questions/399022/why-cant-i-subclass-datetime-date
+    def __new__(cls, datestring):
+        """Create a new GedcomDate based on a GEDCOM datestring"""
+        value = datetime.strptime(datestring, "%d %b %Y")
+        return datetime.__new__(cls, value.year, value.month, value.day)
+    
+    def __str__(self):
+        """Return a string of this object's date."""
+        return datetime.strftime(self, "%d %b %Y")
+
+    def isDateInPast(self):
+        """Return True if the date is in the past."""
+        return self < datetime.today()
+
 class Individual:
     '''This is a datastructure that holds information about an individual.
     It currently saves data about the individual identifier, individual name,
@@ -71,9 +90,9 @@ class Individual:
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
         warnings = []
-        if self.birth != None and self.birth > datetime.today():
+        if self.birth != None and not self.birth.isDateInPast():
             warnings.append(Validation_Results("US01", 'Individual %s has a birth date in the future.' % self.id))
-        if self.death != None and self.death > datetime.today():
+        if self.death != None and not self.death.isDateInPast():
             warnings.append(Validation_Results("US01", 'Individual %s has a death date in the future.' % self.id))
         return warnings
 
@@ -151,9 +170,9 @@ class Family:
     def _Check_Dates_Before_Today(self):
         """Validation routine for US01 : Dates before current date."""
         warnings = []
-        if self.married != None and self.married > datetime.today():
+        if self.married != None and not self.married.isDateInPast():
             warnings.append(Validation_Results("US01", 'Family %s has a marriage date in the future.' % self.id))
-        if self.divorced != None and self.divorced > datetime.today():
+        if self.divorced != None and not self.divorced.isDateInPast():
             warnings.append(Validation_Results("US01", 'Family %s has a divorce date in the future.' % self.id))
         return warnings
         

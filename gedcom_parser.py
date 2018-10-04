@@ -4,9 +4,8 @@
 # Ayana Perry
 # Rakshith Varadaraju
 
-import datetime
 import re
-from gedcom_types import Validation_Results, Individual,  Family,  Parser_Results
+from gedcom_types import Validation_Results, Individual,  Family,  Parser_Results,  GedcomDate
 
 # All of the valid tags in this subset of GEDCOM
 # Use named part of the regexp to make extraction easy.
@@ -67,9 +66,10 @@ def parse_line (line):
                               args = m.group('args'))
 
 def parse_date(str):
-    """Attempt to parse a date string.  If not parse-able, return None."""
+    """Attempt to parse a date string.  If not parse-able, return None.
+    Not needed by parser, but used by existing unit tests."""
     try:
-        return datetime.datetime.strptime(str, "%d %b %Y")
+        return GedcomDate(str)
     except:
         return None
 
@@ -154,11 +154,10 @@ def parse_file (handle):
                 elif fields.tag in DATE_TAGS:
                     stack.append(fields.tag)
                 elif fields.tag == "DATE":
-                    parsed_date = parse_date(fields.args)
                     field_to_set = stack.pop()
-                    if parsed_date != None:
-                        data[stack[0]][stack[1]].apply_value(field_to_set, parsed_date)
-                    else:
+                    try:
+                        data[stack[0]][stack[1]].apply_value(field_to_set, GedcomDate(fields.args))
+                    except:
                         warnings.append(
                             Validation_Results("US42", "Date failed validation (%s) for %s (will skip setting date field %s):" %
                                                        (stack[1], fields.args,  field_to_set)))
