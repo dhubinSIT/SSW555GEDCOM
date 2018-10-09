@@ -27,8 +27,6 @@ class US30TestCase(unittest.TestCase):
         LivingMarried = US30_Listlivingmarried_main({'@okay1@': self.OkayIndi1,'@okay2@': self.OkayIndi2},\
                                                     {'@okayf@': self.OkayFam})
         self.assertTrue(self.OkayFam in LivingMarried)
-        self.assertTrue(self.OkayIndi1, self.OkayFam in LivingMarried)
-        #self.assertIsNot(self.OkayIndi1, self.OkayFam in LivingMarried)
 
 #UnitTest function 
 def main():
