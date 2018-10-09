@@ -28,7 +28,7 @@ class US30TestCase(unittest.TestCase):
                                                     {'@okayf@': self.OkayFam})
         self.assertTrue(self.OkayFam in LivingMarried)
         self.assertTrue(self.OkayIndi1, self.OkayFam in LivingMarried)
-        self.assertIsNot(self.OkayIndi1, self.OkayFam in LivingMarried)
+        #self.assertIsNot(self.OkayIndi1, self.OkayFam in LivingMarried)
 
 #UnitTest function 
 def main():
