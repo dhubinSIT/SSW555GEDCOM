@@ -8,13 +8,29 @@
 2 DATE 11 JUL 2013
 1 FAMS @US03_US02_US28_F8@
 0 NOTE The following help demonstate US03, Birth before Death
-0 @US03_I5@ INDI
+0 @US03_US05_I5@ INDI
 1 NAME Derek /Simmons/
 1 SEX M
 1 FAMS @US03_US02_US28_F8@
 1 BIRT
 2 DATE 16 JAN 1964
 1 DEAT
+2 DATE 15 JAN 1964
+0 NOTE The following help demonstrate US04, Birth before Divorce
+0 @US04_I1@ INDI
+1 NAME Marie /Simmons/
+1 SEX F
+1 FAMS @US04_F9@
+1 BIRT
+2 DATE 16 JAN 1964
+1 DEAT
+2 DATE 20 JAN 2018
+0 NOTE Family to test US04, Birth before Divorce
+0 @US04_F9@ FAM
+1 WIFE @US04_F9@
+1 MARR
+2 DATE 18 JAN 1994
+1 DIV
 2 DATE 15 JAN 1964
 0 NOTE The following help demonstrate US28, Siblings by Age
 0 @US28_I1@ INDI
@@ -49,7 +65,7 @@
 1 FAMC @US03_US02_US28_F8@
 0 NOTE Cover a combination of US03 and US02 and US28
 0 @US03_US02_US28_F8@ FAM
-1 HUSB @US03_I5@
+1 HUSB @US03_US05_I5@
 1 WIFE @US02_I7@
 1 CHIL @US28_I16@
 1 CHIL @US28_I20@
