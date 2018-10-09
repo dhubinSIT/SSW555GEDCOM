@@ -17,8 +17,8 @@ class US29TestCase(unittest.TestCase):
 
     def test_US29_ListOfDeceased(self):
         """List of Deceased."""
-        self.assertFalse(US29_ListOfDeceased({'@okay1@': self.OkayIndi1}) != 'Prince William')
-        self.assertTrue(US29_ListOfDeceased({'@okay1@': self.OkayIndi1}) == 'Prince William')
+        self.assertFalse(US29_ListOfDeceased({'@okay1@': self.OkayIndi1}) == 'Prince William')
+        self.assertTrue(US29_ListOfDeceased({'@okay1@': self.OkayIndi1}) != 'Prince William')
 
 #UnitTest function 
 def main():
@@ -26,4 +26,4 @@ def main():
           
 if __name__ == "__main__":
     unittest.main(exit=False, verbosity=2)
-    main()
+    main() 

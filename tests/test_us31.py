@@ -14,16 +14,19 @@ class US31TestCase(unittest.TestCase):
     def setUp(self):
         self.OkayIndi1 = Individual('@okay1@')
         self.OkayIndi1.apply_value('BIRT', parse_date('1 JUN 1985'))
-        self.OkayIndi1.apply_value('DEAT', parse_date('1 JUN 1985'))
+        self.OkayIndi1.apply_value('DEAT', parse_date('1 JUN 2015'))
         self.OkayIndi1.apply_value('NAME', 'Princess Kate')
-
 
     def test_US31_Listofliving(self):
         """List of Living."""
-        self.assertFalse(US31_Listofliving({'@okay1@': self.OkayIndi1}) == 'Princess Kate')
-        self.assertFalse(US31_Listofliving({'@okay1@': self.OkayIndi1}) == 'Princess Kate','1 JUN 1985')
+        Listofliving = US31_Listofliving({'@okay1@': self.OkayIndi1})
 
+        self.assertFalse(self.OkayIndi1 in Listofliving)
 
 # UnitTest function
 def main():
     '''main() function'''
+
+if __name__ == "__main__":
+    unittest.main(exit=False, verbosity=2)
+    main()
