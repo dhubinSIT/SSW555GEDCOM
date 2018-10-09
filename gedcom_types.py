@@ -32,6 +32,10 @@ class GedcomDate(datetime):
         """Return True if the date is in the past."""
         return self < datetime.today()
 
+    def isDateGreaterThan(self, comparedate):
+        '''Return True if Date is greater than date to compare'''
+        return comparedate != None and self > comparedate
+
 class Individual:
     '''This is a datastructure that holds information about an individual.
     It currently saves data about the individual identifier, individual name,
@@ -99,7 +103,7 @@ class Individual:
     def _Check_Birth_Before_Death(self):
         '''Validation routine for US03 : Birth date before Death date'''
         warnings = []
-        if self.birth != None and self.death != None and self.birth > self.death:
+        if self.birth != None and self.birth.isDateGreaterThan(self.death):
             warnings.append(Validation_Results("US03", 'Individual %s has a birth date after death date.' % self.id))
         return warnings
         
@@ -190,6 +194,6 @@ class Family:
     def _Check_Marriage_Before_Divorce(self):
         '''Validation routine for US04: Marriage date before Divorce date'''
         warnings = []
-        if self.married != None and self.divorced != None and self.married > self.divorced:
+        if self.married != None and self.married.isDateGreaterThan(self.divorced):
             warnings.append(Validation_Results("US04", 'Family %s has a marriage date after divorce date.' % self.id))
         return warnings
