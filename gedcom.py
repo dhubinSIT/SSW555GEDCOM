@@ -80,7 +80,7 @@ def US28_SiblingsByAge_pt(indi, fam):
 def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
     pt = PrettyTable(field_names=['Deceased_Names', 'Deceased_Date'])
-    print('List of Deceased')
+    print('US29_List of Deceased')
     for x in sorted(indi):
         deceased = list()
         if indi[x].death != None:
@@ -94,7 +94,7 @@ def US29_ListOfDeceased(indi):
 
 def US30_ListLivingMarried_pt(indi, fam):
     '''AP's User story 30 - List living married'''
-    print('List living married')
+    print('US30_List living married')
     pt = PrettyTable(field_names=['Husband', 'Wife'])
     marriedFamilies = US30_Listlivingmarried_main(indi, fam)
     for family in marriedFamilies:
@@ -115,7 +115,7 @@ def US30_Listlivingmarried_main(indi, fam):
 def US31_Listofliving(indi):
     """ AP User story 31 - List of Living """
     pt = PrettyTable(field_names=['Living Names', 'Birthdays'])
-    print('List of Living')
+    print('US31_List of Living')
     for i in sorted(indi):
         living = list()
         if indi[i].death == None:
