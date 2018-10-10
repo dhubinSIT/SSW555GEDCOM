@@ -7,6 +7,7 @@
 '''GEDCOM code to display the Individuals and Families using PrettyTable module'''
 import sys
 import datetime
+from typing import List, Any
 
 from prettytable import PrettyTable
 from gedcom_parser import parse_file
@@ -127,6 +128,46 @@ def US31_Listofliving(indi):
     return living
 
 
+def US32_ListMultipleBirths_pt(indi, fam):
+    """APs User Story 32 - List multiple births PrettyTable program"""
+    print('List Multiple Births')
+    pt = PrettyTable(field_names=['Childrens_Names','Birthdays'])
+    multiple_births = US32_ListMultipleBirths_main(indi,fam)
+    for births in multiple_births:
+        pt.add_row([indi[births.children_id_list].name, indi[births.child_family_ids].name, indi[births].birth])
+    print(pt)
+
+
+def US32_ListMultipleBirths_main(indi, fam):
+    """APs User Story 32 - List multiple births main program"""
+    multiple = list()
+    for mb in fam:
+        if fam[mb].children_id_list is None and fam[indi[mb].child_family_ids].name is None and \
+                indi[mb].birth is not None:
+            multiple.append(fam[mb])
+    return multiple
+
+
+def US33_ListOrphans_pt(indi, fam):
+    """AP's User Story 33 - List orphans PrettyTable function"""
+    print('List of Orphans')
+    pt = PrettyTable(field_names=['Orphan_Children'])
+    orphans = US33_ListOrphans_main(indi, fam)
+    for o in orphans:
+        pt.add_row([indi[o.child_family_ids].name])
+    print(pt)
+
+
+def US33_ListOrphans_main(indi, fam):
+    """AP's User Story 33 - List orphans Main function"""
+    orphanchildren = list()
+    for f in fam:
+        if fam[f].husband_id is None and indi[fam[f].husband_id].death is not None and \
+                fam[f].wife_id is None and indi[fam[f].wife_id].death is not None:
+            orphanchildren.append(fam[f])
+    return orphanchildren
+
+
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
@@ -134,7 +175,6 @@ def printWarnings(warnings):
         pt = PrettyTable(field_names=['Code', 'Message'])
         for warn in warnings:
             pt.add_row([warn.story, warn.message])
-        pt.sortby = "Code"
         print(pt)
     else:
         print()
@@ -143,7 +183,7 @@ def printWarnings(warnings):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open(sys.argv[1], 'r') as f:
+    with open('C:/Users/Ayana Perry/Documents/StevensInstituteofTechnology/Hubin_fictional_family.ged', 'r') as f:
         (indi, fam, parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi, fam)
 
@@ -153,4 +193,6 @@ if __name__ == "__main__":
         US29_ListOfDeceased(indi)
         US30_ListLivingMarried_pt(indi, fam)
         US31_Listofliving(indi)
+        US32_ListMultipleBirths_pt(indi, fam)
+        US33_ListOrphans_pt(indi, fam)
         printWarnings(warnings)
