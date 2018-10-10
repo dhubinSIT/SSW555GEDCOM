@@ -160,11 +160,11 @@ class Family:
         self.children_list.append(ref)
 
     def validate(self):
-        '''This function checks for the following errors
-        US01 : Dates before current date.'''        
+        '''This function checks for all family-supported errors.'''        
         return self._Check_Dates_Before_Today() +\
                self._Check_References() +\
-               self._Check_Marriage_Before_Divorce()
+               self._Check_Marriage_Before_Divorce() +\
+               self._Check_Excessive_Siblings()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -177,6 +177,11 @@ class Family:
         return warnings
         
     def _Check_References(self):
+        '''Validation routine for US26: All family roles (spouse, child) specified in an
+        individual record should have corresponding entries in the corresponding family
+        records. Likewise, all individual roles (spouse, child) specified in family records
+        should have corresponding entries in the corresponding  individual's records.
+        I.e. the information in the individual and family records should be consistent.'''
         warnings = []
         if self.husband != None and self not in self.husband.spouse_families:
             warnings.append(Validation_Results("US26",  "Family %s references husband %s, but husband does not reference family." % (self.id,  self.husband_id)))
@@ -192,4 +197,11 @@ class Family:
         warnings = []
         if self.married != None and self.divorced != None and self.married > self.divorced:
             warnings.append(Validation_Results("US04", 'Family %s has a marriage date after divorce date.' % self.id))
+        return warnings
+
+    def _Check_Excessive_Siblings(self):
+        '''Validation routine for US15: There should be fewer than 15 siblings in a family.'''
+        warnings = []
+        if len(self.children_list) >= 15:
+            warnings.append(Validation_Results("US15", "Family %s has a suspiciously large number of children (%d)" % (self.id, len(self.children_list))))
         return warnings
