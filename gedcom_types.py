@@ -5,7 +5,7 @@
 # Rakshith Varadaraju
 
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime,  timedelta
 
 # Pass around named fields for ease of use (probably overkill)
 Parser_Results = namedtuple("Parser_Results", ['valid', 'level', 'tag', 'args'])
@@ -168,7 +168,8 @@ class Family:
         return self._Check_Dates_Before_Today() +\
                self._Check_References() +\
                self._Check_Marriage_Before_Divorce() +\
-               self._Check_Excessive_Siblings()
+               self._Check_Excessive_Siblings() +\
+               self._Check_Parent_Child_Relative_Ages()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -208,4 +209,16 @@ class Family:
         warnings = []
         if len(self.children_list) >= 15:
             warnings.append(Validation_Results("US15", "Family %s has a suspiciously large number of children (%d)" % (self.id, len(self.children_list))))
+        return warnings
+
+    def _Check_Parent_Child_Relative_Ages(self):
+        warnings = []
+        if self.husband != None and self.husband.birth != None:
+            for child in self.children_list:
+                if child.birth != None and (self.husband.birth + timedelta(80 * 365.25)) <= child.birth:
+                    warnings.append(Validation_Results("US12", "Father %s of %s is suspiciously old at the time of birth." % (self.husband.id,  child.id)))
+        if self.wife != None and self.wife.birth != None:
+            for child in self.children_list:
+                if child.birth != None and (self.wife.birth + timedelta(60 * 365.25)) <= child.birth:
+                    warnings.append(Validation_Results("US12", "Mother %s of %s is suspiciously old at the time of birth." % (self.wife.id,  child.id)))
         return warnings
