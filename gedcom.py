@@ -16,7 +16,7 @@ import gedcom_validation
 def datestring(d):
     """Pretty-print a date for output."""
     if d != None:
-        return str(d)
+        return datetime.datetime.strftime(d, "%d %b %Y")
     else:
         return ""
 
@@ -80,10 +80,10 @@ def US28_SiblingsByAge_pt(indi, fam):
 def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
     pt = PrettyTable(field_names=['Deceased_Names', 'Deceased_Date'])
-    print('US29_List of Deceased')
+    print('List of Deceased')
     for x in sorted(indi):
         deceased = list()
-        if indi[x].death != None:
+        if indi[x].death is not None:
             died = datestring(indi[x].death)
             names = indi[x].name
             deceased.append(names)
@@ -94,7 +94,7 @@ def US29_ListOfDeceased(indi):
 
 def US30_ListLivingMarried_pt(indi, fam):
     '''AP's User story 30 - List living married'''
-    print('US30_List living married')
+    print('List living married')
     pt = PrettyTable(field_names=['Husband', 'Wife'])
     marriedFamilies = US30_Listlivingmarried_main(indi, fam)
     for family in marriedFamilies:
@@ -106,8 +106,8 @@ def US30_Listlivingmarried_main(indi, fam):
     '''AP's User story 30 - List living married'''
     married = list()
     for f in fam:
-        if fam[f].divorced == None and fam[f].husband_id != None and indi[fam[f].husband_id].death == None and \
-                fam[f].wife_id != None and indi[fam[f].wife_id].death == None:
+        if fam[f].divorced is None and fam[f].husband_id is not None and indi[fam[f].husband_id].death is None and \
+                fam[f].wife_id is not None and indi[fam[f].wife_id].death is None:
             married.append(fam[f])
     return married
 
@@ -115,10 +115,10 @@ def US30_Listlivingmarried_main(indi, fam):
 def US31_Listofliving(indi):
     """ AP User story 31 - List of Living """
     pt = PrettyTable(field_names=['Living Names', 'Birthdays'])
-    print('US31_List of Living')
+    print('List of Living')
     for i in sorted(indi):
         living = list()
-        if indi[i].death == None:
+        if indi[i].death is None:
             alive = datestring(indi[i].birth)
             names = indi[i].name
             living.append(names)
