@@ -178,7 +178,7 @@ def printWarnings(warnings):
 
 if __name__ == "__main__":
     '''Begin by opening the file '''
-    with open('C:/Users/Ayana Perry/Desktop/SSW555GEDCOM-master/SSW555GEDCOM-master/Sprint3_Demo.ged', 'r') as f:
+    with open(sys.argv[1], 'r') as f:
         (indi, fam, parse_warns) = parse_file(f)
         warnings = parse_warns + gedcom_validation.collect_validation_warnings(indi, fam)
 
