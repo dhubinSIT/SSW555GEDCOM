@@ -132,15 +132,17 @@ def US32_Listofmultiplebirths(indi):
     """ AP User story 32 - List of Living """
     pt = PrettyTable(field_names=['Children Names', 'Birthdays'])
     print('List of Multiple Births')
-    for b in sorted(indi):
-        births = list()
-        if indi[b].birth is not None:
-            alive = datestring(indi[b].birth)
-            names = indi[b].name
-            births.append(names)
-            pt.add_row([names,alive])
+    births = list()
+    for index in indi:
+        for index1 in indi:
+            if indi[index].birth == indi[index1].birth and index != index1 and \
+            indi[index].birth is not None:
+                pt.add_row([indi[index].name, datestring(indi[index].birth)])
+                births.append(indi[index])  
+                break
     print(pt)
     return births
+
 
 def US33_ListOrphans_pt(indi, fam):
     """AP's User Story 33 - List orphans PrettyTable function"""
