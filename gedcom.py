@@ -7,8 +7,6 @@
 '''GEDCOM code to display the Individuals and Families using PrettyTable module'''
 import sys
 import datetime
-from typing import List, Any
-
 from prettytable import PrettyTable
 from gedcom_parser import parse_file
 import gedcom_validation
@@ -172,6 +170,7 @@ def printWarnings(warnings):
         pt = PrettyTable(field_names=['Code', 'Message'])
         for warn in warnings:
             pt.add_row([warn.story, warn.message])
+        pt.sortby = "Code"
         print(pt)
     else:
         print()
