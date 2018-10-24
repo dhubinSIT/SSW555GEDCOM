@@ -169,7 +169,9 @@ class Family:
                self._Check_References() +\
                self._Check_Marriage_Before_Divorce() +\
                self._Check_Excessive_Siblings() +\
-               self._Check_Parent_Child_Relative_Ages()
+               self._Check_Parent_Child_Relative_Ages() +\
+               self._Check_Children_Birth_After_Marriage() +\
+               self._Check_Children_Birth_After_Divorce()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -221,4 +223,22 @@ class Family:
             for child in self.children_list:
                 if child.birth != None and (self.wife.birth + timedelta(60 * 365.25)) <= child.birth:
                     warnings.append(Validation_Results("US12", "Mother %s of %s is suspiciously old at the time of birth." % (self.wife.id,  child.id)))
+        return warnings
+
+    def _Check_Children_Birth_After_Marriage(self):
+        '''Validation routine for US08: Birth after marriage of parents'''
+        warnings = []
+        if self.married != None:
+            for child in self.children_list:
+                if child.birth != None and child.birth < self.married:
+                    warnings.append(Validation_Results("US08", 'Child %s was born before Parents marriage date.' % child.id))
+        return warnings
+
+    def _Check_Children_Birth_After_Divorce(self):
+        '''Validation routine for US08: Birth Nine months after divorce of parents'''
+        warnings = []
+        if self.divorced != None:
+            for child in self.children_list:
+                if child.birth != None and child.birth > (self.divorced + timedelta(274)):
+                    warnings.append(Validation_Results("US08", 'Child %s was born nine months after Parents divorce date' % child.id))
         return warnings
