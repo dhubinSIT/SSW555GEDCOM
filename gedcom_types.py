@@ -171,7 +171,8 @@ class Family:
                self._Check_Excessive_Siblings() +\
                self._Check_Parent_Child_Relative_Ages() +\
                self._Check_Children_Birth_After_Marriage() +\
-               self._Check_Children_Birth_After_Divorce()
+               self._Check_Children_Birth_After_Divorce() +\
+               self._Check_Children_Birth_Before_Parent_Death()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -241,4 +242,19 @@ class Family:
             for child in self.children_list:
                 if child.birth != None and child.birth > (self.divorced + timedelta(274)):
                     warnings.append(Validation_Results("US08", 'Child %s was born nine months after Parents divorce date' % child.id))
+        return warnings
+
+    def _Check_Children_Birth_Before_Parent_Death(self):
+        '''Validation routine for US09: Birth before death of parents'''
+        warnings = []
+        if self.wife != None and self.wife.death != None:
+            for child in self.children_list:
+                if child.birth != None and child.birth > self.wife.death:
+                    warnings.append(Validation_Results("US09", 'Child %s was born after Mothers death' % child.id))
+
+        if self.husband != None and self.husband.death != None:
+            for child in self.children_list:
+                if child.birth != None and child.birth > (self.husband.death + timedelta(274)):
+                    warnings.append(Validation_Results("US09", 'Child %s was born nine months after Fathers death' % child.id))
+
         return warnings
