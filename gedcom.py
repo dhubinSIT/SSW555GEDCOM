@@ -64,7 +64,7 @@ def US28_SiblingsByAge(siblingslist, indi, fam):
 
 def US28_SiblingsByAge_pt(indi, fam):
     '''A's User story 28-Order Siblings by Age.'''
-    print('US28_Siblings by their ages')
+    print('US28: Siblings by their ages')
     for x in sorted(fam):
         pt = PrettyTable(field_names=['Siblings_Names', 'Siblings_Ages'])
         siblings_age = dict()
@@ -79,7 +79,7 @@ def US28_SiblingsByAge_pt(indi, fam):
 def US29_ListOfDeceased(indi):
     '''AP's User story 29 - List Deceased.'''
     pt = PrettyTable(field_names=['Deceased_Names', 'Deceased_Date'])
-    print('List of Deceased')
+    print('US29: List of Deceased')
     for x in sorted(indi):
         deceased = list()
         if indi[x].death is not None:
@@ -93,7 +93,7 @@ def US29_ListOfDeceased(indi):
 
 def US30_ListLivingMarried_pt(indi, fam):
     '''AP's User story 30 - List living married'''
-    print('List living married')
+    print('US30: List living married')
     pt = PrettyTable(field_names=['Husband', 'Wife'])
     marriedFamilies = US30_Listlivingmarried_main(indi, fam)
     for family in marriedFamilies:
@@ -114,7 +114,7 @@ def US30_Listlivingmarried_main(indi, fam):
 def US31_Listofliving(indi):
     """ AP User story 31 - List of Living """
     pt = PrettyTable(field_names=['Living Names', 'Birthdays'])
-    print('List of Living')
+    print('US31: List of Living')
     for i in sorted(indi):
         living = list()
         if indi[i].death is None:
@@ -129,7 +129,7 @@ def US31_Listofliving(indi):
 def US32_Listofmultiplebirths(indi):
     """ AP User story 32 - List of Living """
     pt = PrettyTable(field_names=['Children Names', 'Birthdays'])
-    print('List of Multiple Births')
+    print('US32: List of Multiple Births')
     births = list()
     for index in indi:
         for index1 in indi:
@@ -144,7 +144,7 @@ def US32_Listofmultiplebirths(indi):
 
 def US33_ListOrphans_pt(indi, fam):
     """AP's User Story 33 - List orphans PrettyTable function"""
-    print('List of Orphans')
+    print('US33: List of Orphans')
     pt = PrettyTable(field_names=['Orphan_Children'])
     orphans = US33_ListOrphans_main(indi, fam)
     for ofam in orphans:
