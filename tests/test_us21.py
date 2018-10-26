@@ -5,7 +5,6 @@
 # Rakshith Varadaraju
 
 import unittest
-from gedcom import *
 from gedcom_types import Individual, Family
 
 class US21TestCase(unittest.TestCase):
