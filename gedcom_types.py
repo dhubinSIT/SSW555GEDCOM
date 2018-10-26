@@ -172,7 +172,8 @@ class Family:
                self._Check_Parent_Child_Relative_Ages() +\
                self._Check_Children_Birth_After_Marriage() +\
                self._Check_Children_Birth_After_Divorce() +\
-               self._Check_Children_Birth_Before_Parent_Death()
+               self._Check_Children_Birth_Before_Parent_Death() +\
+               self._Check_Familial_Roles()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -257,4 +258,13 @@ class Family:
                 if child.birth != None and child.birth > (self.husband.death + timedelta(274)):
                     warnings.append(Validation_Results("US09", 'Child %s was born nine months after Fathers death' % child.id))
 
+        return warnings
+
+    def _Check_Familial_Roles(self):
+        """Validation routine for US21: Correct gender for role"""
+        warnings = []
+        if self.wife != None and self.wife.gender != None and self.wife.gender != "F":
+            warnings.append(Validation_Results("US21", "Wife %s of family %s isn't female." % (self.wife.id, self.id)))
+        if self.husband != None and self.husband.gender != None and self.husband.gender != "M":
+            warnings.append(Validation_Results("US21", "Husband %s of family %s isn't male." % (self.husband.id, self.id)))
         return warnings
