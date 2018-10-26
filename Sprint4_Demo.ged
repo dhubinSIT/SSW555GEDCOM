@@ -322,3 +322,17 @@
 0 @US21_FAM@ FAM
 1 HUSB @US21_MasculineWoman@
 1 WIFE @US21_FeminineMan@
+0 NOTE The following helps demonstrate
+0 NOTE US23 Unique name and birth date
+0 @US23_First@ INDI
+1 NAME Danny /Duplicate/
+1 BIRT
+2 DATE 28 FEB 2018
+0 @US23_Second@ INDI
+1 NAME Danny /Duplicate/
+1 BIRT
+2 DATE 28 FEB 2018
+0 @US23_Third@ INDI
+1 NAME Danny /Duplicate/
+1 BIRT
+2 DATE 28 FEB 2018
