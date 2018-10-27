@@ -30,10 +30,10 @@ def lookupname(individuals, key):
 def printIndividuals(indi):
     '''Produce and print the table of individuals.'''
     print('Individuals')
-    pt = PrettyTable(field_names=['ID', 'Name', 'Gender', 'Birthday', 'Death', 'Child', 'Spouse'])
+    pt = PrettyTable(field_names=['ID', 'Name', 'Gender', 'Birthday', 'Death', 'Age', 'Child', 'Spouse'])
     for x in sorted(indi):
         pt.add_row([indi[x].id, indi[x].name, indi[x].gender, datestring(indi[x].birth), datestring(indi[x].death),
-                    indi[x].child_family_ids, indi[x].spouse_family_ids])
+                    indi[x].age, indi[x].child_family_ids, indi[x].spouse_family_ids])
     print(pt)
 
 

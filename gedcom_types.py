@@ -58,10 +58,18 @@ class Individual:
         self.gender = None
         self.birth = None
         self.death = None
+        self.age = None
         self.child_family_ids = []
         self.child_families = []
         self.spouse_family_ids = []
         self.spouse_families = []
+
+    def _update_individual_age(self):
+        '''This function helps to determine the individual age to print in the summary'''
+        if self.birth != None and self.death != None:
+            self.age = self.death.year - self.birth.year -((self.death.month, self.death.day) < (self.birth.month, self.birth.day))
+        elif self.birth != None:
+            self.age = datetime.today().year - self.birth.year - ((datetime.today().month, datetime.today().day) < (self.birth.month, self.birth.day))
         
     def apply_value(self, gedcomTag,  value):
         '''This function determines which fields to add into the individual
@@ -76,6 +84,7 @@ class Individual:
             self.spouse_family_ids.append(value)
         else:
             setattr(self, Individual.TAG_MAP[gedcomTag], value)
+            self._update_individual_age()
 
     def add_family_ref(self, gedcomTag, ref):
         """Add an object reference for the associated tag."""
