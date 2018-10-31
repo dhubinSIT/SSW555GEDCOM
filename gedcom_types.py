@@ -182,7 +182,8 @@ class Family:
                self._Check_Children_Birth_After_Marriage() +\
                self._Check_Children_Birth_After_Divorce() +\
                self._Check_Children_Birth_Before_Parent_Death() +\
-               self._Check_Familial_Roles()
+               self._Check_Familial_Roles() +\
+               self._Check_Siblings_Married_to_Each_Other()
                 # + self._Next_Validation_Routine()...
         
     def _Check_Dates_Before_Today(self):
@@ -277,3 +278,16 @@ class Family:
         if self.husband != None and self.husband.gender != None and self.husband.gender != "M":
             warnings.append(Validation_Results("US21", "Husband %s of family %s isn't male." % (self.husband.id, self.id)))
         return warnings
+
+    def _Check_Siblings_Married_to_Each_Other(self):
+        """Validation routine for US18: Siblings should not marry"""
+        warnings = []
+        children_spouse_list = set()
+        for child in self.children_list:
+            for fid in child.spouse_family_ids:
+                if fid in children_spouse_list:
+                    warnings.append(Validation_Results("US18", "Child %s is married to a sibling" % child.id))
+                else:
+                    children_spouse_list.add(fid)
+        return warnings
+

@@ -211,6 +211,10 @@
 1 NAME BabyA /Rabbits/
 1 BIRT
 2 DATE 1 JUN 2018
+0 NOTE The following family demonstrates US18, siblings should not marry
+0 @US18_SiblingSpouse@ FAM
+1 HUSB @US15_Child10@
+1 WIFE @US15_Child11@
 0 @US15_Child2@ INDI
 1 FAMC @US15_HugeFam@
 1 NAME BabyB /Rabbits/
@@ -252,11 +256,13 @@
 1 BIRT
 2 DATE 1 JUN 2018
 0 @US15_Child10@ INDI
+1 FAMS @US18_SiblingSpouse@
 1 FAMC @US15_HugeFam@
 1 NAME BabyJ /Rabbits/
 1 BIRT
 2 DATE 1 JUN 2018
 0 @US15_Child11@ INDI
+1 FAMS @US18_SiblingSpouse@
 1 FAMC @US15_HugeFam@
 1 NAME BabyK /Rabbits/
 1 BIRT
