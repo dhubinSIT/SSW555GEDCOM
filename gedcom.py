@@ -163,6 +163,25 @@ def US33_ListOrphans_main(indi, fam):
     return orphanchildren
 
 
+def US35_Listrecentbirths(indi):
+    """AP User Story 35 - List Recent Births"""
+    """List all people in a GEDCOM file who were born in the last 30 days"""
+    now = datetime.date.today()
+    pt = PrettyTable(field_names=['Recent_Names', 'Recent_BirthdayDates'])
+    print('US35: List Recent Births')
+    for nb in sorted(indi):
+        newbirths = list()
+        if indi[nb].birth is not None:
+            birthday_dates = datestring(indi[nb].birth) 
+            birthday = datetime.date(2018,10,1)
+            if birthday >= now: 
+                names = indi[nb].name
+                newbirths.append(names)
+                pt.add_row([names, birthday_dates])
+    print(pt)
+    return newbirths
+
+
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
     if len(warnings) > 0:
