@@ -167,7 +167,7 @@ def US35_Listrecentbirths(indi):
     """AP User Story 35 - List Recent Births"""
     """List all people in a GEDCOM file who were born in the last 30 days"""
     now = datetime.date.today()
-    pt = PrettyTable(field_names=['Recent_Names', 'Recent_BirthdayDates'])
+    pt = PrettyTable(field_names=['RecentBirth_Names', 'Recent_BirthdayDates'])
     print('US35: List Recent Births')
     for nb in sorted(indi):
         newbirths = list()
@@ -181,6 +181,21 @@ def US35_Listrecentbirths(indi):
     print(pt)
     return newbirths
 
+
+def US36_Listrecentbirths(indi):
+    """AP User Story 36 - List Recent Deaths"""
+    """List all people in a GEDCOM file who died in the last 30 days"""
+    now = datetime.date.today()
+    pt = PrettyTable(field_names=['RecentDeceased_Names', 'Recent_DeceasedDates'])
+    print('US36: List Recent Deaths')
+    for rd in sorted(indi):
+        deaths = list()
+        if indi[rd].death is not None:
+            deceased_dates = datestring(indi[rd].death) 
+            passed = datetime.date(2018,10,1)
+            if passed >= now: 
+                names = indi[rd].name
+                dea
 
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
@@ -210,4 +225,6 @@ if __name__ == "__main__":
         US31_Listofliving(indi)
         US32_Listofmultiplebirths(indi)
         US33_ListOrphans_pt(indi, fam)
+        US35_Listrecentbirths(indi)
+        US36_Listrecentdeaths(indi)
         printWarnings(warnings)
