@@ -1,4 +1,3 @@
-
 # SSW 555 Project GEDCOM Parser / Validator
 #
 # David Hubin
