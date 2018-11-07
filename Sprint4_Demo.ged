@@ -314,9 +314,11 @@
 0 NOTE The following helps demonstrate
 0 NOTE US21 Correct gender for role
 0 @US21_MasculineWoman@ INDI
+1 NAME Masculine /Woman/
 1 SEX F
 1 FAMS @US21_FAM@
 0 @US21_FeminineMan@ INDI
+1 NAME Feminine /Man/
 1 SEX M
 1 FAMS @US21_FAM@
 0 @US21_FAM@ FAM
