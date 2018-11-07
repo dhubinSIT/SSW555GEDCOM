@@ -211,10 +211,6 @@
 1 NAME BabyA /Rabbits/
 1 BIRT
 2 DATE 1 JUN 2018
-0 NOTE The following family demonstrates US18, siblings should not marry
-0 @US18_SiblingSpouse@ FAM
-1 HUSB @US15_Child10@
-1 WIFE @US15_Child11@
 0 @US15_Child2@ INDI
 1 FAMC @US15_HugeFam@
 1 NAME BabyB /Rabbits/
@@ -256,13 +252,11 @@
 1 BIRT
 2 DATE 1 JUN 2018
 0 @US15_Child10@ INDI
-1 FAMS @US18_SiblingSpouse@
 1 FAMC @US15_HugeFam@
 1 NAME BabyJ /Rabbits/
 1 BIRT
 2 DATE 1 JUN 2018
 0 @US15_Child11@ INDI
-1 FAMS @US18_SiblingSpouse@
 1 FAMC @US15_HugeFam@
 1 NAME BabyK /Rabbits/
 1 BIRT
@@ -342,3 +336,15 @@
 1 NAME Danny /Duplicate/
 1 BIRT
 2 DATE 28 FEB 2018
+0 NOTE The following help demonstrate US35, List recent births within the last 30 days
+0 @US35_I1@ INDI
+1 NAME Porky /Pig/
+1 SEX F
+1 BIRT
+2 DATE 31 OCT 2018
+0 NOTE The following help demonstrate US36, List recent deaths within the last 30 days
+0 @US36_I1@ INDI
+1 NAME Sylvester /the Cat/
+1 SEX M
+1 DEAT
+2 DATE 25 OCT 2018
