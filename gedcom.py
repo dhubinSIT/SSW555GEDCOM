@@ -166,18 +166,18 @@ def US33_ListOrphans_main(indi, fam):
 def US35_Listrecentbirths(indi):
     """AP User Story 35 - List Recent Births"""
     """List all people in a GEDCOM file who were born in the last 30 days"""
-    now = datetime.date.today()
+    now = datetime.datetime.today()
     pt = PrettyTable(field_names=['RecentBirth_Names', 'Recent_BirthdayDates'])
     print('US35: List Recent Births')
     for nb in sorted(indi):
         newbirths = list()
         if indi[nb].birth is not None:
-            birthday_dates = datestring(indi[nb].birth) 
-            birthday = datetime.date(2018,10,1)
-            if birthday >= now: 
+            birthday_dates = indi[nb].birth
+            birthday = datetime.datetime(2018, 10, 31)
+            if birthday <= birthday_dates and birthday_dates < now:
                 names = indi[nb].name
                 newbirths.append(names)
-                pt.add_row([names, birthday_dates])
+                pt.add_row([names, datestring(birthday_dates)])
     print(pt)
     return newbirths
 
@@ -185,20 +185,21 @@ def US35_Listrecentbirths(indi):
 def US36_Listrecentdeaths(indi):
     """AP User Story 36 - List Recent Deaths"""
     """List all people in a GEDCOM file who died in the last 30 days"""
-    now = datetime.date.today()
+    now = datetime.datetime.today()
     pt = PrettyTable(field_names=['RecentDeceased_Names', 'Recent_DeceasedDates'])
     print('US36: List Recent Deaths')
     for rd in sorted(indi):
         deaths = list()
         if indi[rd].death is not None:
-            deceased_dates = datestring(indi[rd].death) 
-            passed = datetime.date(2018,10,1)
-            if passed >= now: 
+            deceased_dates = indi[rd].death
+            passed = datetime.datetime(2018, 10, 25)
+            if passed <= deceased_dates and deceased_dates < now:
                 names = indi[rd].name
                 deaths.append(names)
-                pt.add_row([names, deceased_dates])
+                pt.add_row([names, datestring(deceased_dates)])
     print(pt)
     return deaths
+
 
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
