@@ -9,6 +9,7 @@ from gedcom import *
 from gedcom_types import Individual
 from gedcom_parser import parse_date
 
+
 class US35TestCase(unittest.TestCase):
     def setUp(self):
         self.OkayIndi1 = Individual('@okay1@')
@@ -17,14 +18,17 @@ class US35TestCase(unittest.TestCase):
 
     def test_US35_Listrecentbirths(self):
         """List of recent births."""
-        recentbirths = US35_Listrecentbirths({'@okay1@': self.OkayIndi1})
+        recent_births = US35_Listrecentbirths({'@okay1@': self.OkayIndi1})
 
-        self.assertFalse(self.OkayIndi1 in recentbirths)
+        self.assertFalse(self.OkayIndi1 in recent_births)
+
 
 # UnitTest function
 def main():
     '''main() function'''
 
+
 if __name__ == "__main__":
     unittest.main(exit=False, verbosity=2)
     main()
+
