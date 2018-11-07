@@ -182,7 +182,7 @@ def US35_Listrecentbirths(indi):
     return newbirths
 
 
-def US36_Listrecentbirths(indi):
+def US36_Listrecentdeaths(indi):
     """AP User Story 36 - List Recent Deaths"""
     """List all people in a GEDCOM file who died in the last 30 days"""
     now = datetime.date.today()
@@ -195,7 +195,10 @@ def US36_Listrecentbirths(indi):
             passed = datetime.date(2018,10,1)
             if passed >= now: 
                 names = indi[rd].name
-                dea
+                deaths.append(names)
+                pt.add_row([names, deceased_dates])
+    print(pt)
+    return deaths
 
 def printWarnings(warnings):
     """Produce and print the table of warnings."""
